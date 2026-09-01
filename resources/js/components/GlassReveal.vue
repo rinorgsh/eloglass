@@ -1,19 +1,97 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { MoveHorizontal } from 'lucide-vue-next';
 
 /**
  * Carreau interactif : on fait glisser la raclette pour nettoyer la vitre.
  * C'est exactement le geste que vend l'entreprise — d'où sa place sur la page.
  *
- * L'interaction repose sur un <input type="range"> transparent : le clavier,
- * le tactile et la souris fonctionnent sans code supplémentaire.
+ * Le glissement est géré à la main via les évènements pointer plutôt qu'avec
+ * un <input type="range"> : sur mobile, un appui sur la piste d'un range
+ * déplace le curseur mais ne démarre PAS de glissement, ce qui obligeait à
+ * taper point par point. Ici, on suit le doigt dès le premier contact.
  */
 const clean = ref(0);
-const root = ref(null);
+const surface = ref(null);
+const dragging = ref(false);
+
 let observer;
 let raf;
 
+const position = computed(() => Math.round(clean.value));
+
+function valueFromClientX(clientX) {
+    const rect = surface.value.getBoundingClientRect();
+
+    return Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+}
+
+function stopHint() {
+    cancelAnimationFrame(raf);
+}
+
+function onPointerDown(event) {
+    stopHint();
+    dragging.value = true;
+    clean.value = valueFromClientX(event.clientX);
+
+    // La capture garantit qu'on continue de recevoir les mouvements même si
+    // le doigt sort du carreau. Elle échoue sur certains pointeurs : le
+    // glissement doit continuer de fonctionner sans elle.
+    try {
+        surface.value.setPointerCapture(event.pointerId);
+    } catch {
+        // Sans capture, les mouvements restent captés tant qu'on reste sur le carreau.
+    }
+}
+
+function onPointerMove(event) {
+    if (! dragging.value) {
+        return;
+    }
+
+    clean.value = valueFromClientX(event.clientX);
+}
+
+function onPointerUp(event) {
+    if (! dragging.value) {
+        return;
+    }
+
+    dragging.value = false;
+
+    try {
+        surface.value?.releasePointerCapture(event.pointerId);
+    } catch {
+        // Aucune capture active : rien à relâcher.
+    }
+}
+
+// Le clavier pilote la raclette comme un curseur standard.
+function onKeydown(event) {
+    const step = event.shiftKey ? 12 : 4;
+    const keys = {
+        ArrowLeft: () => clean.value - step,
+        ArrowDown: () => clean.value - step,
+        ArrowRight: () => clean.value + step,
+        ArrowUp: () => clean.value + step,
+        Home: () => 0,
+        End: () => 100,
+    };
+
+    if (! keys[event.key]) {
+        return;
+    }
+
+    event.preventDefault();
+    stopHint();
+    clean.value = Math.min(100, Math.max(0, keys[event.key]()));
+}
+
+/**
+ * Au premier passage à l'écran, la raclette avance seule : c'est ce qui
+ * fait comprendre qu'elle est manipulable.
+ */
 function animateHint() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         clean.value = 55;
@@ -26,6 +104,10 @@ function animateHint() {
     const target = 58;
 
     const tick = (now) => {
+        if (dragging.value) {
+            return;
+        }
+
         const t = Math.min((now - start) / duration, 1);
         // Décélération : le geste ralentit en fin de course, comme une vraie raclette.
         clean.value = target * (1 - Math.pow(1 - t, 3));
@@ -57,8 +139,8 @@ onMounted(() => {
         { threshold: 0.45 },
     );
 
-    if (root.value) {
-        observer.observe(root.value);
+    if (surface.value) {
+        observer.observe(surface.value);
     }
 });
 
@@ -69,12 +151,23 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <figure ref="root" class="m-0">
+    <figure class="m-0">
         <div class="pane relative overflow-hidden shadow-pane">
-            <div class="relative aspect-[5/4] w-full sm:aspect-[16/10]">
+            <!--
+                touch-action: pan-y laisse la page défiler verticalement sous le
+                doigt, tout en nous confiant les mouvements horizontaux.
+            -->
+            <div
+                ref="surface"
+                class="glass-surface relative aspect-[5/4] w-full cursor-ew-resize select-none sm:aspect-[16/10]"
+                @pointerdown.prevent="onPointerDown"
+                @pointermove="onPointerMove"
+                @pointerup="onPointerUp"
+                @pointercancel="onPointerUp"
+            >
                 <!-- La vue derrière la vitre : une skyline, comme les immeubles du logo. -->
                 <svg
-                    class="absolute inset-0 size-full"
+                    class="pointer-events-none absolute inset-0 size-full"
                     viewBox="0 0 800 500"
                     preserveAspectRatio="xMidYMid slice"
                     aria-hidden="true"
@@ -146,7 +239,7 @@ onBeforeUnmount(() => {
 
                 <!-- La saleté, révélée à droite de la raclette -->
                 <div
-                    class="grime absolute inset-0"
+                    class="grime pointer-events-none absolute inset-0"
                     :style="{ clipPath: `inset(0 0 0 ${clean}%)` }"
                     aria-hidden="true"
                 />
@@ -164,33 +257,33 @@ onBeforeUnmount(() => {
                 <div
                     class="pointer-events-none absolute inset-y-0 z-10 w-0"
                     :style="{ left: clean + '%' }"
-                    aria-hidden="true"
                 >
-                    <span class="absolute inset-y-0 -left-[3px] w-[6px] rounded-full bg-linear-to-b from-graphite-700 via-graphite-900 to-graphite-700 shadow-[0_0_12px_rgba(11,39,94,0.45)]" />
-                    <span class="absolute inset-y-0 left-[3px] w-[10px] bg-linear-to-r from-white/85 to-transparent" />
-                    <span class="absolute top-1/2 left-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-graphite-900 text-white shadow-lift">
-                        <MoveHorizontal class="size-5" />
+                    <span class="absolute inset-y-0 -left-[3px] w-[6px] rounded-full bg-linear-to-b from-graphite-700 via-graphite-900 to-graphite-700 shadow-[0_0_12px_rgba(11,39,94,0.45)]" aria-hidden="true" />
+                    <span class="absolute inset-y-0 left-[3px] w-[10px] bg-linear-to-r from-white/85 to-transparent" aria-hidden="true" />
+                    <span
+                        role="slider"
+                        tabindex="0"
+                        aria-label="Faire glisser la raclette pour nettoyer la vitre"
+                        aria-orientation="horizontal"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        :aria-valuenow="position"
+                        :aria-valuetext="position + ' % nettoyé'"
+                        class="pointer-events-auto absolute top-1/2 left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize touch-none place-items-center rounded-full border-2 border-white bg-graphite-900 text-white shadow-lift transition-transform"
+                        :class="dragging ? 'scale-110' : 'hover:scale-105'"
+                        @keydown="onKeydown"
+                    >
+                        <MoveHorizontal class="size-5" aria-hidden="true" />
                     </span>
                 </div>
 
                 <!-- Étiquettes d'état -->
-                <span class="absolute bottom-3 left-3 z-10 rounded-[5px] bg-white/90 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-nuit-800 uppercase">
+                <span class="pointer-events-none absolute bottom-3 left-3 z-10 rounded-[5px] bg-white/90 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-nuit-800 uppercase">
                     Après
                 </span>
-                <span class="absolute right-3 bottom-3 z-10 rounded-[5px] bg-graphite-900/80 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-white uppercase">
+                <span class="pointer-events-none absolute right-3 bottom-3 z-10 rounded-[5px] bg-graphite-900/80 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-white uppercase">
                     Avant
                 </span>
-
-                <!-- Contrôle réel : invisible, mais pilotable au doigt et au clavier -->
-                <input
-                    v-model.number="clean"
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="0.5"
-                    class="glass-range absolute inset-0 z-20 size-full cursor-ew-resize appearance-none bg-transparent"
-                    aria-label="Faire glisser la raclette pour nettoyer la vitre"
-                />
             </div>
         </div>
         <figcaption class="mt-3 text-center text-sm text-graphite-500">
@@ -200,6 +293,17 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/*
+| Le doigt pilote l'horizontale, le navigateur garde la verticale : la page
+| continue donc de défiler normalement au-dessus du carreau.
+*/
+.glass-surface {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
 /*
 | La saleté : un voile gris, des coulures verticales, des gouttes séchées et
 | un flou du décor situé derrière. C'est ce flou qui rend l'effet crédible.
@@ -220,28 +324,5 @@ onBeforeUnmount(() => {
             rgba(255, 255, 255, 0.14) 0 7px,
             transparent 7px 22px
         );
-}
-
-/*
-| La piste et le curseur natifs sont masqués : la raclette dessinée au-dessus
-| joue le rôle de curseur. La zone tactile reste, elle, pleine hauteur.
-*/
-.glass-range::-webkit-slider-thumb {
-    appearance: none;
-    width: 56px;
-    height: 100%;
-    background: transparent;
-    cursor: ew-resize;
-}
-.glass-range::-moz-range-thumb {
-    width: 56px;
-    height: 999px;
-    border: none;
-    background: transparent;
-    cursor: ew-resize;
-}
-.glass-range:focus-visible {
-    outline: 2px solid var(--color-elo-600);
-    outline-offset: 2px;
 }
 </style>

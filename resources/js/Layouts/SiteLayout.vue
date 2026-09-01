@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
-import { Phone, Menu, X, MessageCircle, MapPin, Mail, Clock, ArrowRight } from 'lucide-vue-next';
+import { Phone, Menu, X, MapPin, Mail, Clock, ArrowRight } from 'lucide-vue-next';
 import EloLogo from '../components/EloLogo.vue';
+import WhatsAppIcon from '../components/WhatsAppIcon.vue';
 
 const page = usePage();
 const company = computed(() => page.props.company);
@@ -169,6 +170,16 @@ function goToSection(id) {
                             <Phone class="size-4" aria-hidden="true" />
                             {{ phone }}
                         </a>
+                        <a
+                            :href="whatsappHref"
+                            target="_blank"
+                            rel="noopener"
+                            class="btn btn-whatsapp mt-3 w-full text-base"
+                            data-lead-cta="menu-whatsapp"
+                        >
+                            <WhatsAppIcon class="size-5" />
+                            Écrire sur WhatsApp
+                        </a>
                         <a :href="'mailto:' + email" class="mt-3 flex items-center gap-2 text-sm text-graphite-500">
                             <Mail class="size-4 text-elo-600" aria-hidden="true" /> {{ email }}
                         </a>
@@ -248,7 +259,10 @@ function goToSection(id) {
                                 <Link href="/mentions-legales" class="transition hover:text-white">Mentions légales</Link>
                             </li>
                             <li>
-                                <a :href="whatsappHref" target="_blank" rel="noopener" class="transition hover:text-white">WhatsApp</a>
+                                <a :href="whatsappHref" target="_blank" rel="noopener" class="inline-flex items-center gap-2 transition hover:text-white">
+                                    <WhatsAppIcon class="size-4 text-[#25d366]" />
+                                    WhatsApp
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -277,11 +291,11 @@ function goToSection(id) {
                     :href="whatsappHref"
                     target="_blank"
                     rel="noopener"
-                    class="btn btn-ghost w-12 shrink-0 px-0"
+                    class="btn btn-whatsapp w-12 shrink-0 px-0"
                     aria-label="Écrire sur WhatsApp"
                     data-lead-cta="sticky-whatsapp"
                 >
-                    <MessageCircle class="size-5 text-elo-600" aria-hidden="true" />
+                    <WhatsAppIcon class="size-6" />
                 </a>
                 <button
                     type="button"

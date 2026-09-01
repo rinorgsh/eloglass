@@ -196,6 +196,16 @@
         background: var(--color-ciel-100);
     }
 
+    /* Vert officiel WhatsApp : c'est la couleur qui fait reconnaître le bouton. */
+    .btn-whatsapp {
+        background: #25d366;
+        color: #fff;
+        box-shadow: 0 10px 24px -14px rgba(37, 211, 102, 0.9);
+    }
+    .btn-whatsapp:hover {
+        background: #1eb45a;
+    }
+
     .field {
         width: 100%;
         min-height: 3rem;
