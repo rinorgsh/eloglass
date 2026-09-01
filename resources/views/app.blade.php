@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 @php
     $seo = $seo ?? [];
-    $title = $seo['title'] ?? 'Elo Glass — Lavage de vitres à Bruxelles et en périphérie';
-    $description = $seo['description'] ?? 'Lavage de vitres pour particuliers et professionnels. Sans traces, à l\'eau osmosée. Devis gratuit sous 24 h.';
+    $title = $seo['title'] ?? 'Elo Glass — Lavage de vitres et nettoyage de bureaux à Bruxelles';
+    $description = $seo['description'] ?? 'Lavage de vitres et nettoyage de bureaux pour particuliers et professionnels. Sans traces, à l\'eau osmosée. Devis gratuit sous 24 h.';
     $canonical = $seo['canonical'] ?? url()->current();
     $image = $seo['image'] ?? url('/og-image.jpg');
 @endphp

@@ -17,11 +17,27 @@ return [
     |----------------------------------------------------------------------
     | Prestations
     |----------------------------------------------------------------------
+    | Deux familles : 'vitres' et 'bureaux'. Le champ 'family' sert au
+    | regroupement à l'écran et dans le sélecteur du formulaire ; le reste
+    | du site (JSON-LD, pages locales) consomme la liste à plat.
+    |
     | 'icon' correspond à un composant lucide-vue-next.
     */
+    'families' => [
+        'vitres' => [
+            'label' => 'Lavage de vitres',
+            'lead' => 'Toutes les surfaces vitrées, à l\'eau osmosée, sans traces ni résidus.',
+        ],
+        'bureaux' => [
+            'label' => 'Nettoyage de bureaux',
+            'lead' => 'L\'entretien complet de vos locaux, en contrat régulier ou en remise en état.',
+        ],
+    ],
+
     'services' => [
         [
             'slug' => 'vitres-residentielles',
+            'family' => 'vitres',
             'icon' => 'Home',
             'title' => 'Vitres de maison',
             'short' => 'Fenêtres, baies vitrées et châssis',
@@ -29,6 +45,7 @@ return [
         ],
         [
             'slug' => 'vitrines-commerciales',
+            'family' => 'vitres',
             'icon' => 'Store',
             'title' => 'Vitrines de commerce',
             'short' => 'Devantures, en ponctuel ou en contrat',
@@ -36,6 +53,7 @@ return [
         ],
         [
             'slug' => 'immeubles-bureaux',
+            'family' => 'vitres',
             'icon' => 'Building2',
             'title' => 'Immeubles & bureaux',
             'short' => 'Halls, plateaux, parties communes',
@@ -43,6 +61,7 @@ return [
         ],
         [
             'slug' => 'verandas-verrieres',
+            'family' => 'vitres',
             'icon' => 'Frame',
             'title' => 'Vérandas & verrières',
             'short' => 'Vitrages en hauteur et toitures',
@@ -50,6 +69,7 @@ return [
         ],
         [
             'slug' => 'panneaux-solaires',
+            'family' => 'vitres',
             'icon' => 'SunMedium',
             'title' => 'Panneaux photovoltaïques',
             'short' => 'Jusqu\'à +20 % de rendement',
@@ -57,10 +77,54 @@ return [
         ],
         [
             'slug' => 'nettoyage-apres-chantier',
+            'family' => 'vitres',
             'icon' => 'HardHat',
             'title' => 'Nettoyage après chantier',
             'short' => 'Étiquettes, ciment, peinture',
             'text' => 'Retrait des étiquettes, résidus de ciment, silicone, peinture et poussières de ponçage après vos travaux de construction ou de rénovation.',
+        ],
+
+        /* ---------------- Nettoyage de bureaux ---------------- */
+
+        [
+            'slug' => 'entretien-bureaux',
+            'family' => 'bureaux',
+            'icon' => 'Briefcase',
+            'title' => 'Entretien de bureaux',
+            'short' => 'Plateaux, postes de travail, poubelles',
+            'text' => 'Nettoyage régulier de vos plateaux : bureaux, écrans, poubelles et corbeilles de tri, salles de réunion. Passage quotidien, hebdomadaire ou selon le rythme que vous fixez.',
+        ],
+        [
+            'slug' => 'sanitaires-cuisines',
+            'family' => 'bureaux',
+            'icon' => 'SprayCan',
+            'title' => 'Sanitaires & cuisines',
+            'short' => 'Désinfection et réapprovisionnement',
+            'text' => 'Toilettes, lavabos, coins café et kitchenettes nettoyés et désinfectés. Réapprovisionnement du papier, du savon et des essuie-mains si vous le souhaitez.',
+        ],
+        [
+            'slug' => 'sols-moquettes',
+            'family' => 'bureaux',
+            'icon' => 'Footprints',
+            'title' => 'Sols & moquettes',
+            'short' => 'Aspiration, lavage, shampouinage',
+            'text' => 'Aspiration et lavage des sols durs, shampouinage des moquettes et tapis d\'entrée. Traitement des taches avant qu\'elles ne s\'incrustent.',
+        ],
+        [
+            'slug' => 'parties-communes',
+            'family' => 'bureaux',
+            'icon' => 'Building',
+            'title' => 'Parties communes',
+            'short' => 'Halls, escaliers, ascenseurs',
+            'text' => 'Halls d\'entrée, cages d\'escalier, ascenseurs et couloirs d\'immeubles de bureaux ou de logements. Nous travaillons aussi pour les syndics et les gestionnaires.',
+        ],
+        [
+            'slug' => 'remise-en-etat',
+            'family' => 'bureaux',
+            'icon' => 'PackageOpen',
+            'title' => 'Remise en état',
+            'short' => 'Fin de bail, déménagement',
+            'text' => 'Nettoyage complet avant un état des lieux de sortie ou après un déménagement : sols, sanitaires, vitrages intérieurs et dépoussiérage en hauteur.',
         ],
     ],
 
@@ -375,7 +439,7 @@ return [
         ],
         [
             'q' => 'Intervenez-vous chez les particuliers comme chez les professionnels ?',
-            'a' => "Oui, les deux. Nous nettoyons les vitres de maisons et d'appartements, mais aussi les vitrines de commerces, les bureaux, les halls d'immeubles et les surfaces vitrées de bâtiments professionnels, en passage ponctuel ou en contrat d'entretien régulier.",
+            'a' => "Oui, les deux. Nous lavons les vitres des maisons et des appartements, et nous assurons l'entretien complet des bureaux, commerces et immeubles : vitrines, plateaux, sanitaires, sols et parties communes, en passage ponctuel ou en contrat régulier.",
         ],
         [
             'q' => 'À quelle fréquence faut-il faire nettoyer ses vitres ?',
@@ -400,6 +464,14 @@ return [
         [
             'q' => 'Dans quelles communes intervenez-vous ?',
             'a' => "Nous couvrons les 19 communes de la Région de Bruxelles-Capitale ainsi que toute la périphérie : Rhode-Saint-Genèse, Kraainem, Wezembeek-Oppem, Tervuren, Overijse, Hoeilaart, Zaventem, Dilbeek, Grimbergen, La Hulpe, Lasne et Waterloo.",
+        ],
+        [
+            'q' => 'Faites-vous aussi le nettoyage de bureaux, ou seulement les vitres ?',
+            'a' => "Les deux. Le lavage de vitres est notre spécialité, mais nous assurons également l'entretien complet de locaux professionnels : bureaux et postes de travail, sanitaires et cuisines, sols et moquettes, parties communes, salles de réunion. La plupart de nos clients professionnels nous confient les deux, ce qui leur évite de gérer deux prestataires.",
+        ],
+        [
+            'q' => 'Comment fonctionne un contrat d\'entretien de bureaux ?',
+            'a' => "Nous convenons ensemble du périmètre, de la fréquence (quotidienne, plusieurs fois par semaine, hebdomadaire) et des horaires — généralement tôt le matin ou en soirée, pour ne gêner personne. Vous avez un prix mensuel fixe, le même intervenant à chaque passage, et aucun engagement de longue durée.",
         ],
         [
             'q' => 'Sous quel délai recevrai-je mon devis ?',

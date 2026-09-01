@@ -23,6 +23,9 @@ const company = computed(() => page.props.company);
 const phone = computed(() => page.props.contactPhone);
 const phoneHref = computed(() => 'tel:' + page.props.contactPhoneE164);
 
+const glassServices = computed(() => props.services.filter((s) => s.family === 'vitres'));
+const officeServices = computed(() => props.services.filter((s) => s.family === 'bureaux'));
+
 // Communes voisines : maillage interne, limité pour rester lisible.
 const nearby = computed(() => props.zones.slice(0, 8));
 </script>
@@ -55,8 +58,12 @@ const nearby = computed(() => props.zones.slice(0, 8));
                     <div class="lg:col-span-6 xl:col-span-7">
                         <p class="eyebrow reveal text-elo-600">{{ zone.postal }} · {{ zone.province }}</p>
 
+                        <!-- Les deux métiers dans le H1 : ce sont les deux requêtes visées. -->
                         <h1 class="reveal mt-4 font-display text-[length:var(--step-h1)] leading-[1.05] font-extrabold text-nuit-800">
                             Lavage de vitres à <span class="text-shine">{{ zone.city }}</span>
+                            <span class="mt-1.5 block text-[0.52em] leading-tight font-semibold text-graphite-500">
+                                et nettoyage de bureaux
+                            </span>
                         </h1>
 
                         <p class="reveal mt-5 max-w-xl text-[length:var(--step-lead)] leading-relaxed text-graphite-500">
@@ -96,7 +103,7 @@ const nearby = computed(() => props.zones.slice(0, 8));
                             <p class="font-display text-lg font-bold text-nuit-800">
                                 Votre prix pour {{ zone.city }}
                             </p>
-                            <p class="mt-1 mb-5 text-sm text-graphite-500">Réponse sous {{ company.responseTime }}, sans engagement.</p>
+                            <p class="mt-1 mb-5 text-sm text-graphite-500">Vitres ou entretien de locaux — réponse sous {{ company.responseTime }}.</p>
                             <LeadForm :services="services" :default-city="zone.city" id-prefix="zone-hero" />
                         </div>
                     </div>
@@ -131,7 +138,7 @@ const nearby = computed(() => props.zones.slice(0, 8));
                     <div class="lg:col-span-7">
                         <div class="grid gap-4 sm:grid-cols-2">
                             <article
-                                v-for="service in services"
+                                v-for="service in glassServices"
                                 :key="service.slug"
                                 class="pane reveal p-5"
                             >
@@ -150,17 +157,61 @@ const nearby = computed(() => props.zones.slice(0, 8));
             </div>
         </section>
 
+        <!-- Nettoyage de bureaux -->
+        <section class="section-y border-t border-filet">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
+                    <div class="lg:col-span-5">
+                        <p class="eyebrow reveal text-elo-600">Entreprises</p>
+                        <h2 class="reveal mt-3 font-display text-[length:var(--step-h2)] leading-tight font-extrabold text-nuit-800">
+                            Nettoyage de bureaux à {{ zone.city }}
+                        </h2>
+                        <p class="reveal mt-4 leading-relaxed text-graphite-500">
+                            Nous ne faisons pas que les vitres. Pour les entreprises, cabinets et commerces de
+                            {{ zone.city }}, nous assurons l’entretien complet des locaux — en contrat régulier, tôt
+                            le matin ou en soirée, avec le même intervenant à chaque passage.
+                        </p>
+                        <a :href="phoneHref" class="btn btn-primary reveal mt-6" data-lead-cta="zone-office-call">
+                            <Phone class="size-4" aria-hidden="true" />
+                            {{ phone }}
+                        </a>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <ul class="grid gap-3 sm:grid-cols-2">
+                            <li
+                                v-for="service in officeServices"
+                                :key="service.slug"
+                                class="pane reveal flex items-start gap-3.5 p-4"
+                            >
+                                <span
+                                    class="relative grid size-9 shrink-0 place-items-center rounded-[7px] text-white"
+                                    style="background: linear-gradient(135deg, #0b275e 0%, #08447f 55%, #33373d 100%)"
+                                >
+                                    <ServiceIcon :name="service.icon" class="size-4" aria-hidden="true" />
+                                </span>
+                                <span class="relative">
+                                    <span class="block font-display font-bold text-nuit-800">{{ service.title }}</span>
+                                    <span class="mt-0.5 block text-sm leading-relaxed text-graphite-500">{{ service.short }}</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Devis -->
         <section id="devis" class="section-y border-t border-filet">
             <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <p class="eyebrow reveal text-elo-600">Devis</p>
                     <h2 class="reveal mt-3 font-display text-[length:var(--step-h2)] leading-tight font-extrabold text-nuit-800">
-                        Combien pour vos vitres à {{ zone.city }}&nbsp;?
+                        Combien pour vos vitres ou vos locaux à {{ zone.city }}&nbsp;?
                     </h2>
                     <p class="reveal mx-auto mt-4 max-w-xl text-[length:var(--step-lead)] leading-relaxed text-graphite-500">
-                        Décrivez-nous ce qu’il y a à nettoyer. Vous recevez un prix ferme sous
-                        {{ company.responseTime }} — ou appelez directement le {{ phone }}.
+                        Vitres, bureaux ou les deux : décrivez-nous ce qu’il y a à faire. Vous recevez un prix
+                        ferme sous {{ company.responseTime }} — ou appelez directement le {{ phone }}.
                     </p>
                 </div>
 

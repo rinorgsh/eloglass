@@ -83,7 +83,7 @@ class Seo
                     '@type' => 'Service',
                     'name' => $service['title'],
                     'description' => $service['text'],
-                    'serviceType' => 'Lavage de vitres',
+                    'serviceType' => $service['family'] === 'bureaux' ? 'Nettoyage de bureaux' : 'Lavage de vitres',
                 ],
             ];
         }
@@ -94,7 +94,7 @@ class Seo
             'name' => $company['name'],
             'legalName' => $company['legal_name'],
             'alternateName' => $company['name'].' — '.$company['tagline'],
-            'description' => 'Entreprise de lavage de vitres pour particuliers et professionnels à Bruxelles et en périphérie. Vitres de maison, vitrines, bureaux, vérandas et panneaux solaires. Devis gratuit.',
+            'description' => 'Lavage de vitres et nettoyage de bureaux pour particuliers et professionnels à Bruxelles et en périphérie. Vitrines, vérandas, panneaux solaires, entretien de locaux, sanitaires, sols et parties communes. Devis gratuit.',
             'url' => $siteUrl.'/',
             'logo' => [
                 '@type' => 'ImageObject',
@@ -131,7 +131,7 @@ class Seo
             'sameAs' => $company['social'],
             'hasOfferCatalog' => [
                 '@type' => 'OfferCatalog',
-                'name' => 'Prestations de lavage de vitres',
+                'name' => 'Lavage de vitres et nettoyage de bureaux',
                 'itemListElement' => $offers,
             ],
             'potentialAction' => [
@@ -246,15 +246,20 @@ class Seo
      * @param  array<string, mixed>  $zone
      * @return array<string, mixed>
      */
-    public static function localServiceNode(array $zone, string $canonical): array
-    {
+    public static function localServiceNode(
+        array $zone,
+        string $canonical,
+        string $serviceType = 'Lavage de vitres',
+        string $anchor = 'service',
+        ?string $description = null,
+    ): array {
         $siteUrl = rtrim(config('app.url'), '/');
 
         return [
             '@type' => 'Service',
-            '@id' => $canonical.'#service',
-            'name' => 'Lavage de vitres à '.$zone['city'],
-            'serviceType' => 'Lavage de vitres',
+            '@id' => $canonical.'#'.$anchor,
+            'name' => $serviceType.' à '.$zone['city'],
+            'serviceType' => $serviceType,
             'provider' => ['@id' => $siteUrl.'/#business'],
             'areaServed' => [
                 '@type' => 'City',
@@ -267,7 +272,7 @@ class Seo
                     'addressCountry' => 'BE',
                 ],
             ],
-            'description' => $zone['intro'],
+            'description' => $description ?? $zone['intro'],
             'offers' => [
                 '@type' => 'Offer',
                 'availability' => 'https://schema.org/InStock',

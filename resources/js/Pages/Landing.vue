@@ -9,12 +9,22 @@ import FaqList from '../components/FaqList.vue';
 import GlassReveal from '../components/GlassReveal.vue';
 import { useReveal } from '../composables/useReveal';
 
-defineProps({
+const props = defineProps({
     seo: { type: Object, required: true },
     services: { type: Array, required: true },
+    families: { type: Object, required: true },
     zones: { type: Array, required: true },
     faq: { type: Array, required: true },
 });
+
+// Les prestations arrivent à plat ; on les regroupe par famille pour l'affichage.
+const servicesByFamily = computed(() =>
+    props.services.reduce((groups, service) => {
+        (groups[service.family] ??= []).push(service);
+
+        return groups;
+    }, {}),
+);
 
 useReveal();
 
@@ -31,8 +41,8 @@ const email = computed(() => page.props.contactEmail);
 const timeline = [
     {
         when: 'Aujourd’hui',
-        title: 'Vous décrivez vos vitres',
-        text: 'Par téléphone, par WhatsApp ou via le formulaire. Trois photos suffisent la plupart du temps.',
+        title: 'Vous décrivez le besoin',
+        text: 'Vitres à laver, bureaux à entretenir : par téléphone, par WhatsApp ou via le formulaire. Quelques photos suffisent la plupart du temps.',
     },
     {
         when: 'Sous 24 h',
@@ -42,12 +52,12 @@ const timeline = [
     {
         when: 'Le jour convenu',
         title: 'On nettoie',
-        text: 'Vitres, châssis et appuis. Pour l’extérieur, votre présence n’est pas nécessaire.',
+        text: 'Vitres, châssis et appuis ; sols, sanitaires et plateaux. Pour l’extérieur, votre présence n’est pas nécessaire.',
     },
     {
         when: 'Ensuite',
         title: 'Vous vérifiez',
-        text: 'Une trace oubliée ? On repasse. C’est compris dans le prix.',
+        text: 'Une trace oubliée, un coin manqué ? On repasse. C’est compris dans le prix.',
     },
 ];
 
@@ -100,12 +110,13 @@ const trust = [
                     </p>
 
                     <h1 class="reveal mt-4 font-display text-[length:var(--step-h1)] leading-[1.04] font-extrabold text-nuit-800">
-                        Lavage de vitres <span class="text-shine">sans une trace</span>, à Bruxelles et en&nbsp;périphérie
+                        Lavage de vitres <span class="text-shine">sans trace</span> et nettoyage de&nbsp;bureaux
                     </h1>
 
                     <p class="reveal mt-5 max-w-xl text-[length:var(--step-lead)] leading-relaxed text-graphite-500">
-                        Maisons, vitrines, bureaux, vérandas et panneaux solaires. Envoyez-nous trois photos&nbsp;:
-                        vous avez votre prix sous {{ company.responseTime }}, sans visite ni engagement.
+                        À Bruxelles et en périphérie, pour les particuliers comme pour les entreprises.
+                        Décrivez-nous ce qu'il y a à faire&nbsp;: vous avez votre prix sous
+                        {{ company.responseTime }}, sans engagement.
                     </p>
 
                     <div class="reveal mt-7 flex flex-col gap-3 sm:flex-row">
@@ -146,32 +157,43 @@ const trust = [
                 <div class="max-w-2xl">
                     <p class="eyebrow reveal text-elo-600">Prestations</p>
                     <h2 class="reveal mt-3 font-display text-[length:var(--step-h2)] leading-tight font-extrabold text-nuit-800">
-                        Si c’est en verre, on le nettoie
+                        Lavage de vitres et nettoyage de bureaux
                     </h2>
                     <p class="reveal mt-4 text-[length:var(--step-lead)] leading-relaxed text-graphite-500">
-                        Du carreau de cuisine à la verrière de bureau, avec le même résultat attendu&nbsp;: rien à voir,
-                        sauf le paysage.
+                        Deux métiers, une seule équipe et un seul interlocuteur. La plupart de nos clients
+                        professionnels nous confient les deux&nbsp;: leurs vitres et l'entretien de leurs locaux.
                     </p>
                 </div>
 
-                <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <article
-                        v-for="(service, i) in services"
-                        :key="service.slug"
-                        class="pane reveal group p-6 transition duration-200 hover:-translate-y-1 hover:border-ciel-500 hover:shadow-pane"
-                        :style="{ transitionDelay: Math.min(i * 60, 240) + 'ms' }"
-                    >
-                        <span
-                            class="relative grid size-11 place-items-center rounded-[7px] text-white"
-                            style="background: linear-gradient(135deg, #57a1d0 0%, #0a529c 55%, #0b275e 100%)"
-                        >
-                            <ServiceIcon :name="service.icon" class="size-5" aria-hidden="true" />
-                        </span>
-                        <h3 class="relative mt-4 font-display text-[length:var(--step-h3)] font-bold text-nuit-800">
-                            {{ service.title }}
+                <div v-for="(family, key) in families" :key="key" class="mt-12 first:mt-10">
+                    <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                        <h3 class="reveal font-display text-xl font-extrabold text-nuit-800 sm:text-2xl">
+                            {{ family.label }}
                         </h3>
-                        <p class="relative mt-2 text-[0.95rem] leading-relaxed text-graphite-500">{{ service.text }}</p>
-                    </article>
+                        <p class="reveal text-[0.95rem] text-graphite-500">{{ family.lead }}</p>
+                    </div>
+
+                    <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <article
+                            v-for="(service, i) in servicesByFamily[key]"
+                            :key="service.slug"
+                            class="pane reveal group p-6 transition duration-200 hover:-translate-y-1 hover:border-ciel-500 hover:shadow-pane"
+                            :style="{ transitionDelay: Math.min(i * 60, 240) + 'ms' }"
+                        >
+                            <span
+                                class="relative grid size-11 place-items-center rounded-[7px] text-white"
+                                :style="key === 'bureaux'
+                                    ? 'background: linear-gradient(135deg, #0b275e 0%, #08447f 55%, #33373d 100%)'
+                                    : 'background: linear-gradient(135deg, #57a1d0 0%, #0a529c 55%, #0b275e 100%)'"
+                            >
+                                <ServiceIcon :name="service.icon" class="size-5" aria-hidden="true" />
+                            </span>
+                            <h4 class="relative mt-4 font-display text-[length:var(--step-h3)] font-bold text-nuit-800">
+                                {{ service.title }}
+                            </h4>
+                            <p class="relative mt-2 text-[0.95rem] leading-relaxed text-graphite-500">{{ service.text }}</p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>
@@ -189,6 +211,9 @@ const trust = [
                         <h2 class="reveal mt-3 font-display text-[length:var(--step-h2)] leading-tight font-extrabold text-nuit-800">
                             Ce qui fait la différence entre propre et impeccable
                         </h2>
+                        <p class="reveal mt-4 leading-relaxed text-graphite-500">
+                            Sur le vitrage, tout se joue sur la méthode et le matériel.
+                        </p>
 
                         <div class="mt-8 space-y-6">
                             <div v-for="item in method" :key="item.title" class="reveal flex gap-4">
@@ -365,10 +390,10 @@ const trust = [
                 <div class="pane reveal flex flex-col items-start gap-6 overflow-hidden p-7 sm:p-10 md:flex-row md:items-center md:justify-between">
                     <div>
                         <h2 class="relative font-display text-2xl leading-tight font-extrabold text-nuit-800 sm:text-3xl">
-                            Vos vitres méritent mieux qu’un chiffon
+                            Vos vitres et vos locaux méritent mieux qu’un chiffon
                         </h2>
                         <p class="relative mt-2 text-graphite-500">
-                            Un appel, trois photos, un prix. C’est tout ce que ça demande.
+                            Un appel, quelques photos, un prix. C’est tout ce que ça demande.
                         </p>
                     </div>
                     <div class="relative flex w-full shrink-0 flex-col gap-3 sm:flex-row md:w-auto">

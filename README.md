@@ -1,7 +1,7 @@
 # Elo Glass — site vitrine
 
-Site de génération de demandes de devis pour **ELO GLASS SRL**, entreprise de lavage de vitres
-établie Route de l'Etat 11, 1380 Lasne (BCE 0475.199.436).
+Site de génération de demandes de devis pour **ELO GLASS SRL**, entreprise de **lavage de vitres
+et de nettoyage de bureaux** établie Route de l'Etat 11, 1380 Lasne (BCE 0475.199.436).
 
 Zone couverte : les **19 communes de la Région de Bruxelles-Capitale** et la **périphérie**
 (Rhode-Saint-Genèse, Kraainem, Wezembeek-Oppem, Tervuren, Overijse, Hoeilaart, Zaventem,
@@ -24,7 +24,7 @@ php artisan serve
 | Ce que vous voulez changer | Fichier |
 | --- | --- |
 | Téléphone, adresse, TVA, horaires, réseaux sociaux | `config/company.php` |
-| Prestations, communes desservies, FAQ | `config/site.php` |
+| Prestations (deux familles : `vitres` et `bureaux`), communes desservies, FAQ | `config/site.php` |
 | Textes de la page d'accueil | `resources/js/Pages/Landing.vue` |
 | Textes des pages communes | `resources/js/Pages/Zone.vue` + le champ `intro` de chaque zone |
 | Palette, typographie, composants visuels | `resources/css/app.css` |

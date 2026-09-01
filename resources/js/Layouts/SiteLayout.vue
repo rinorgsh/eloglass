@@ -203,8 +203,8 @@ function goToSection(id) {
                     <div class="md:col-span-5">
                         <EloLogo theme="dark" />
                         <p class="mt-5 max-w-sm leading-relaxed text-ciel-100/75">
-                            Nettoyage de vitres pour les maisons, les commerces et les bureaux de Bruxelles
-                            et de sa périphérie. Sans traces, à l'eau osmosée.
+                            Lavage de vitres et nettoyage de bureaux pour les particuliers et les entreprises
+                            de Bruxelles et de sa périphérie. Sans traces, à l'eau osmosée.
                         </p>
 
                         <address class="mt-6 space-y-2.5 text-sm not-italic">
@@ -269,7 +269,7 @@ function goToSection(id) {
                 </div>
 
                 <p class="pt-6 text-center text-xs text-ciel-100/50 sm:text-left">
-                    © {{ new Date().getFullYear() }} {{ company.legalName }} — Lavage de vitres à Bruxelles et en périphérie.
+                    © {{ new Date().getFullYear() }} {{ company.legalName }} — Lavage de vitres et nettoyage de bureaux à Bruxelles et en périphérie.
                 </p>
             </div>
 

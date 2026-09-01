@@ -16,7 +16,7 @@ return [
 
     'legal_name' => 'ELO GLASS SRL',
     'name' => 'Elo Glass',
-    'tagline' => 'Lavage de vitres professionnel',
+    'tagline' => 'Lavage de vitres & nettoyage de bureaux',
 
     /*
     | Numéro d'entreprise / TVA (BCE : 0475.199.436)

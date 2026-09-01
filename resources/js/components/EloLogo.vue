@@ -37,7 +37,7 @@ defineProps({
                 class="mt-1 text-[0.6rem] font-medium tracking-[0.12em] uppercase"
                 :class="theme === 'dark' ? 'text-ciel-300/80' : 'text-graphite-500'"
             >
-                Lavage de vitres
+                Vitres &amp; bureaux
             </span>
         </span>
     </span>

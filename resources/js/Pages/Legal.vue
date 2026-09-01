@@ -53,9 +53,10 @@ const email = computed(() => page.props.contactEmail);
                 <div>
                     <h2 class="font-display text-lg font-bold text-nuit-800">Activité</h2>
                     <p class="mt-2">
-                        Nettoyage de surfaces vitrées pour les particuliers et les professionnels : vitres d’habitation,
-                        vitrines commerciales, bureaux et immeubles, vérandas et verrières, panneaux photovoltaïques,
-                        nettoyage après chantier.
+                        Nettoyage de surfaces vitrées et entretien de locaux professionnels : vitres d’habitation,
+                        vitrines commerciales, vérandas et verrières, panneaux photovoltaïques, nettoyage après
+                        chantier ; entretien de bureaux, sanitaires et cuisines, sols et moquettes, parties communes
+                        et remises en état.
                     </p>
                 </div>
 

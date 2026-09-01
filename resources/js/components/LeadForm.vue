@@ -19,7 +19,7 @@ const phone = computed(() => page.props.contactPhone);
 const phoneHref = computed(() => 'tel:' + page.props.contactPhoneE164);
 const responseTime = computed(() => page.props.company.responseTime);
 
-const propertyTypes = ['Maison', 'Appartement', 'Commerce', 'Bureau / immeuble', 'Autre'];
+const propertyTypes = ['Maison', 'Appartement', 'Commerce', 'Bureaux', 'Immeuble', 'Autre'];
 
 const submitted = ref(false);
 
@@ -36,6 +36,16 @@ const form = useForm({
 });
 
 const endpoint = computed(() => (props.variant === 'callback' ? '/rappel' : '/contact'));
+
+const familyLabels = { vitres: 'Lavage de vitres', bureaux: 'Nettoyage de bureaux' };
+
+const servicesByFamily = computed(() =>
+    props.services.reduce((groups, service) => {
+        (groups[service.family ?? 'vitres'] ??= []).push(service);
+
+        return groups;
+    }, {}),
+);
 
 function submit() {
     form.post(endpoint.value, {
@@ -77,7 +87,7 @@ function submit() {
 
             <template v-if="variant === 'full'">
                 <fieldset class="mb-5">
-                    <legend class="mb-2.5 block text-sm font-semibold text-graphite-700">Que faut-il nettoyer&nbsp;?</legend>
+                    <legend class="mb-2.5 block text-sm font-semibold text-graphite-700">C'est pour quel type de bien&nbsp;?</legend>
                     <div class="flex flex-wrap gap-2">
                         <button
                             v-for="type in propertyTypes"
@@ -170,7 +180,10 @@ function submit() {
                     <label :for="idPrefix + '-service'" class="mb-1.5 block text-sm font-semibold text-graphite-700">Prestation</label>
                     <select :id="idPrefix + '-service'" v-model="form.service" class="field">
                         <option value="">Je ne sais pas encore</option>
-                        <option v-for="svc in services" :key="svc.slug" :value="svc.title">{{ svc.title }}</option>
+                        <!-- Groupé par métier : le visiteur trouve sa prestation sans lire toute la liste. -->
+                        <optgroup v-for="(list, key) in servicesByFamily" :key="key" :label="familyLabels[key]">
+                            <option v-for="svc in list" :key="svc.slug" :value="svc.title">{{ svc.title }}</option>
+                        </optgroup>
                     </select>
                 </div>
 

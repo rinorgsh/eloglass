@@ -12,8 +12,8 @@ class PageController extends Controller
     public function home(): Response
     {
         $meta = Seo::meta(
-            title: 'Lavage de vitres à Bruxelles et en périphérie | Elo Glass',
-            description: 'Elo Glass lave vos vitres sans traces : maisons, vitrines, bureaux, vérandas et panneaux solaires. Les 19 communes de Bruxelles et toute la périphérie. Devis gratuit sous 24 h — 0484 15 20 73.',
+            title: 'Lavage de vitres et nettoyage de bureaux à Bruxelles | Elo Glass',
+            description: 'Elo Glass lave vos vitres sans traces et entretient vos bureaux : vitrines, plateaux, sanitaires, sols et parties communes. Les 19 communes de Bruxelles et toute la périphérie. Devis gratuit sous 24 h — 0484 15 20 73.',
             path: '/',
         );
 
@@ -24,6 +24,7 @@ class PageController extends Controller
         return Inertia::render('Landing', [
             'seo' => $meta,
             'services' => config('site.services'),
+            'families' => config('site.families'),
             'zones' => $this->zoneLinks(),
             'faq' => config('site.faq'),
         ]);
@@ -38,8 +39,8 @@ class PageController extends Controller
         $path = '/lavage-de-vitres/'.$zone['slug'];
 
         $meta = Seo::meta(
-            title: 'Lavage de vitres à '.$zone['city'].' ('.$zone['postal'].') — Devis gratuit | Elo Glass',
-            description: 'Laveur de vitres professionnel à '.$zone['city'].' : maisons, vitrines, bureaux et vérandas. Sans traces, à l\'eau osmosée. Devis gratuit sous 24 h — 0484 15 20 73.',
+            title: 'Lavage de vitres et nettoyage de bureaux à '.$zone['city'].' ('.$zone['postal'].') | Elo Glass',
+            description: 'Laveur de vitres et société de nettoyage à '.$zone['city'].' : maisons, vitrines, vérandas, bureaux et parties communes. Sans traces, à l\'eau osmosée. Devis gratuit sous 24 h — 0484 15 20 73.',
             path: $path,
             breadcrumbs: [
                 ['name' => 'Accueil', 'url' => '/'],
@@ -52,6 +53,14 @@ class PageController extends Controller
 
         $this->shareSeo($meta, [
             Seo::localServiceNode($zone, $meta['canonical']),
+            Seo::localServiceNode(
+                $zone,
+                $meta['canonical'],
+                serviceType: 'Nettoyage de bureaux',
+                anchor: 'service-bureaux',
+                description: 'Entretien de bureaux, commerces et parties communes à '.$zone['city']
+                    .' : plateaux et postes de travail, sanitaires et cuisines, sols et moquettes, halls et cages d\'escalier.',
+            ),
             Seo::faqNode($faq, $meta['canonical']),
         ]);
 
@@ -67,8 +76,8 @@ class PageController extends Controller
     public function zones(): Response
     {
         $meta = Seo::meta(
-            title: "Zones d'intervention — lavage de vitres à Bruxelles et en périphérie | Elo Glass",
-            description: "Elo Glass intervient dans les 19 communes bruxelloises — Uccle, Ixelles, Woluwe, Schaerbeek, Etterbeek… — et en périphérie : Rhode-Saint-Genèse, Kraainem, Tervuren, Overijse, Zaventem, Dilbeek. Devis gratuit sous 24 h.",
+            title: "Zones d'intervention — vitres et nettoyage de bureaux à Bruxelles | Elo Glass",
+            description: "Elo Glass intervient dans les 19 communes bruxelloises — Uccle, Ixelles, Woluwe, Schaerbeek, Etterbeek… — et en périphérie : Rhode-Saint-Genèse, Kraainem, Tervuren, Overijse, Zaventem, Dilbeek. Lavage de vitres et nettoyage de bureaux. Devis gratuit sous 24 h.",
             path: '/lavage-de-vitres',
             breadcrumbs: [
                 ['name' => 'Accueil', 'url' => '/'],
@@ -88,7 +97,7 @@ class PageController extends Controller
     {
         $meta = Seo::meta(
             title: 'Mentions légales | Elo Glass',
-            description: 'Mentions légales et informations d\'entreprise d\'Elo Glass SRL, société de lavage de vitres établie à Lasne (BCE 0475.199.436).',
+            description: 'Mentions légales et informations d\'entreprise d\'Elo Glass SRL, société de lavage de vitres et de nettoyage établie à Lasne (BCE 0475.199.436).',
             path: '/mentions-legales',
             breadcrumbs: [
                 ['name' => 'Accueil', 'url' => '/'],

@@ -13,7 +13,10 @@
       "Bash(npm run *)",
       "Bash(python3 -)",
       "Bash(php artisan *)",
-      "Bash(pkill -f \"artisan serve --port=8123\")"
+      "Bash(pkill -f \"artisan serve --port=8123\")",
+      "Bash(node *)",
+      "Bash(python3 *)",
+      "Bash(php -r '$s = require '\\\\''config/site.php'\\\\''; echo count\\($s['\\\\''faq'\\\\'']\\).'\\\\'' questions'\\\\''.PHP_EOL;')"
     ]
   }
 }
