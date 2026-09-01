@@ -1,25 +1,44 @@
 <script setup>
 defineProps({
-    theme: { type: String, default: 'light' }, // 'light' => sur fond clair, 'dark' => sur fond bleu foncé
+    // 'light' : sur fond clair — 'dark' : sur fond bleu profond
+    theme: { type: String, default: 'light' },
     compact: { type: Boolean, default: false },
 });
 </script>
 
 <template>
     <span class="inline-flex items-center gap-2.5 select-none">
+        <!--
+            Sur fond bleu profond, le graphite de la raclette disparaît :
+            le monogramme est posé sur un carreau blanc.
+        -->
         <span
-            class="grid place-items-center rounded-xl shadow-sm"
-            :class="compact ? 'size-9' : 'size-10'"
-            style="background: linear-gradient(135deg, #7dd3fc 0%, #2563eb 50%, #0f2456 100%)"
+            class="grid shrink-0 place-items-center"
+            :class="theme === 'dark' ? 'rounded-[7px] bg-white p-1.5' : ''"
         >
-            <svg viewBox="0 0 64 64" class="h-3/5 w-3/5" fill="none" aria-hidden="true">
-                <path d="M32 14c6 8 11 13 11 20a11 11 0 0 1-22 0c0-7 5-12 11-20z" fill="#fff" fill-opacity="0.95" />
-                <path d="M40 25l1.7 3.6L45.5 30l-3.8 1.4L40 35l-1.7-3.6L34.5 30l3.8-1.4L40 25z" fill="#38bdf8" />
-            </svg>
+            <img
+                src="/logo-mark.webp"
+                alt=""
+                width="256"
+                height="246"
+                :class="compact ? 'h-9 w-auto' : 'h-10 w-auto'"
+                decoding="async"
+            />
         </span>
-        <span class="font-display font-extrabold tracking-tight" :class="compact ? 'text-lg' : 'text-xl'">
-            <span class="text-gradient">Elo</span>
-            <span :class="theme === 'dark' ? 'text-white' : 'text-ink-900'"> Glass</span>
+        <span class="flex flex-col leading-none">
+            <span
+                class="font-display font-extrabold tracking-[0.14em]"
+                :class="[compact ? 'text-[0.95rem]' : 'text-lg', theme === 'dark' ? 'text-white' : 'text-nuit-800']"
+            >
+                ELO<span :class="theme === 'dark' ? 'text-ciel-300' : 'text-elo-600'"> GLASS</span>
+            </span>
+            <span
+                v-if="!compact"
+                class="mt-1 text-[0.6rem] font-medium tracking-[0.12em] uppercase"
+                :class="theme === 'dark' ? 'text-ciel-300/80' : 'text-graphite-500'"
+            >
+                Lavage de vitres
+            </span>
         </span>
     </span>
 </template>

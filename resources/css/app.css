@@ -4,99 +4,276 @@
 @source '../../storage/framework/views/*.php';
 @source './**/*.vue';
 
+/*
+|------------------------------------------------------------------------------
+| Système « Verre & lumière »
+|------------------------------------------------------------------------------
+| Les couleurs sont échantillonnées directement dans le logo Elo Glass :
+| le bleu profond du monogramme, le bleu de marque, le ciel des étincelles et
+| le graphite de la raclette. Rien n'est inventé.
+|
+| Le motif structurant du site est le CARREAU : des surfaces blanches cernées
+| d'un filet bleu très clair, à faible rayon, avec un reflet en haut à gauche.
+*/
+
 @theme {
-    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-display: 'Bricolage Grotesque', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Archivo', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-    /* Brand — Elo Glass (verre, éclat, bleus) */
-    --color-brand-50: #eff6ff;
-    --color-brand-100: #dbeafe;
-    --color-brand-200: #bfdbfe;
-    --color-brand-300: #93c5fd;
-    --color-brand-400: #60a5fa;
-    --color-brand-500: #3b82f6;
-    --color-brand-600: #2563eb;
-    --color-brand-700: #1d4ed8;
-    --color-brand-800: #1e3a8a;
-    --color-brand-900: #0f2456;
-    --color-brand-950: #0a1836;
+    /* Bleus du logo */
+    --color-nuit-900: #071b41;
+    --color-nuit-800: #0b275e;
+    --color-nuit-700: #0d3878;
+    --color-elo-700: #08447f;
+    --color-elo-600: #0a529c;
+    --color-elo-500: #1268bd;
+    --color-ciel-500: #57a1d0;
+    --color-ciel-300: #9bc9e8;
+    --color-ciel-100: #dbeaf7;
 
-    /* Cyan éclat (les étincelles du logo) */
-    --color-sky-1: #38bdf8;
-    --color-sky-2: #7dd3fc;
+    /* Graphite de la raclette */
+    --color-graphite-900: #0e141b;
+    --color-graphite-700: #33373d;
+    --color-graphite-500: #5b636e;
+    --color-graphite-400: #7b838f;
 
-    /* Ardoise (raclette / texte GLASS) */
-    --color-ink-500: #64748b;
-    --color-ink-700: #334155;
-    --color-ink-900: #0f172a;
+    /* Verre */
+    --color-verre-50: #f7fafd;
+    --color-verre-100: #eef4fa;
+    --color-verre-200: #dbe6f2;
+    --color-filet: #d7e4f2;
 
-    --color-frost: #f5f9ff;
+    --radius-pane: 10px;
+    --radius-control: 7px;
 
-    --shadow-soft: 0 1px 2px rgba(15, 36, 86, 0.04), 0 14px 34px -14px rgba(37, 99, 235, 0.20);
-    --shadow-card: 0 1px 3px rgba(15, 36, 86, 0.06), 0 28px 56px -22px rgba(37, 99, 235, 0.28);
-    --shadow-glow: 0 20px 60px -18px rgba(56, 189, 248, 0.45);
+    --shadow-pane: 0 1px 2px rgba(11, 39, 94, 0.05), 0 12px 28px -18px rgba(11, 39, 94, 0.35);
+    --shadow-lift: 0 2px 4px rgba(11, 39, 94, 0.06), 0 26px 50px -26px rgba(11, 39, 94, 0.45);
 }
 
-html {
-    scroll-behavior: smooth;
+/*
+| Échelle typographique fluide — pensée mobile d'abord.
+*/
+@layer base {
+    :root {
+        --step-label: 0.6875rem;
+        --step-h1: clamp(2.05rem, 1.35rem + 3.1vw, 3.9rem);
+        --step-h2: clamp(1.6rem, 1.2rem + 1.9vw, 2.7rem);
+        --step-h3: clamp(1.075rem, 1rem + 0.35vw, 1.25rem);
+        --step-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+        --section-y: clamp(3.5rem, 6.5vw, 7rem);
+    }
+
+    html {
+        scroll-behavior: smooth;
+        /* Compense l'en-tête fixe lors des ancres. */
+        scroll-padding-top: 5.5rem;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        background-color: #ffffff;
+        color: var(--color-graphite-900);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        /* Laisse la place à la barre d'action fixe du mobile. */
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    h1, h2, h3, h4 {
+        font-family: var(--font-display);
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
+    }
+
+    ::selection {
+        background: var(--color-elo-600);
+        color: #fff;
+    }
+
+    /* Focus visible et homogène partout. */
+    :focus-visible {
+        outline: 2px solid var(--color-elo-600);
+        outline-offset: 3px;
+        border-radius: 3px;
+    }
+
+    /* Sur iOS, un champ sous 16px déclenche un zoom automatique. */
+    input, select, textarea {
+        font-size: max(16px, 1rem);
+        font-family: inherit;
+    }
 }
 
-body {
-    background-color: #ffffff;
-    color: var(--color-ink-900);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+@layer components {
+    /*
+    | L'étiquette lettrée reprend l'espacement du mot « E L O  G L A S S »
+    | du logo. C'est le seul endroit où l'on utilise des capitales.
+    */
+    .eyebrow {
+        font-family: var(--font-display);
+        font-size: var(--step-label);
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+    }
+
+    /*
+    | Le carreau : surface blanche, filet bleu, reflet discret en haut à gauche.
+    */
+    .pane {
+        position: relative;
+        /* Isole la pile locale : le reflet reste sous le contenu du carreau. */
+        isolation: isolate;
+        background: #fff;
+        border: 1px solid var(--color-filet);
+        border-radius: var(--radius-pane);
+    }
+    .pane::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(146deg, rgba(219, 234, 247, 0.75) 0%, rgba(219, 234, 247, 0.28) 22%, transparent 46%);
+    }
+    .pane > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .pane-tint {
+        background: linear-gradient(168deg, #ffffff 0%, var(--color-verre-50) 100%);
+    }
+
+    /* Bouton principal — angles francs, pas de pilule. */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        border-radius: var(--radius-control);
+        font-weight: 600;
+        line-height: 1;
+        /* Cible tactile confortable : 48 px minimum. */
+        min-height: 3rem;
+        padding: 0 1.25rem;
+        transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+    .btn:active {
+        transform: translateY(1px);
+    }
+
+    .btn-primary {
+        background: var(--color-elo-600);
+        color: #fff;
+        box-shadow: 0 10px 24px -14px rgba(10, 82, 156, 0.9);
+    }
+    .btn-primary:hover {
+        background: var(--color-elo-700);
+    }
+
+    .btn-ghost {
+        background: #fff;
+        color: var(--color-nuit-800);
+        border: 1px solid var(--color-filet);
+    }
+    .btn-ghost:hover {
+        border-color: var(--color-ciel-500);
+        background: var(--color-verre-50);
+    }
+
+    .btn-dark {
+        background: #fff;
+        color: var(--color-nuit-800);
+    }
+    .btn-dark:hover {
+        background: var(--color-ciel-100);
+    }
+
+    .field {
+        width: 100%;
+        min-height: 3rem;
+        border: 1px solid var(--color-filet);
+        border-radius: var(--radius-control);
+        background: var(--color-verre-50);
+        padding: 0.75rem 0.875rem;
+        color: var(--color-graphite-900);
+        transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .field::placeholder {
+        color: var(--color-graphite-400);
+    }
+    .field:focus {
+        outline: none;
+        background: #fff;
+        border-color: var(--color-elo-500);
+        box-shadow: 0 0 0 3px rgba(87, 161, 208, 0.28);
+    }
+    .field-error {
+        border-color: #dc2626;
+        background: #fef2f2;
+    }
+
+    /*
+    | Meneaux : filets verticaux évoquant les montants d'une baie vitrée.
+    | Purement décoratif, très discret, désactivé sous 640 px.
+    */
+    .muntins {
+        background-image: linear-gradient(90deg, var(--color-verre-200) 1px, transparent 1px);
+        background-size: 25% 100%;
+        opacity: 0.55;
+    }
+    @media (max-width: 639px) {
+        .muntins {
+            display: none;
+        }
+    }
 }
 
-::selection {
-    background: var(--color-brand-600);
-    color: #fff;
+@layer utilities {
+    .text-shine {
+        background: linear-gradient(104deg, var(--color-ciel-500) 0%, var(--color-elo-600) 42%, var(--color-nuit-800) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .section-y {
+        padding-block: var(--section-y);
+    }
 }
 
-/* Dégradé de marque réutilisable */
-.text-gradient {
-    background: linear-gradient(120deg, var(--color-sky-1) 0%, var(--color-brand-600) 45%, var(--color-brand-900) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-
-/* Effet verre */
-.glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-}
-
-/* Reveal-on-scroll */
+/*
+| Apparition au défilement.
+*/
 .reveal {
     opacity: 0;
-    transform: translateY(26px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
+    transform: translateY(18px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.is-visible {
     opacity: 1;
     transform: none;
 }
+
 @media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
     .reveal {
         opacity: 1;
         transform: none;
         transition: none;
     }
-    html {
-        scroll-behavior: auto;
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
     }
-}
-
-/* Éclat qui scintille */
-@keyframes twinkle {
-    0%, 100% { opacity: 0.25; transform: scale(0.85); }
-    50% { opacity: 1; transform: scale(1.1); }
-}
-.twinkle {
-    animation: twinkle 3s ease-in-out infinite;
 }

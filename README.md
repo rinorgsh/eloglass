@@ -1,58 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Elo Glass — site vitrine
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Site de génération de demandes de devis pour **ELO GLASS SRL**, entreprise de lavage de vitres
+établie Route de l'Etat 11, 1380 Lasne (BCE 0475.199.436).
 
-## About Laravel
+Zone couverte : les **19 communes de la Région de Bruxelles-Capitale** et la **périphérie**
+(Rhode-Saint-Genèse, Kraainem, Wezembeek-Oppem, Tervuren, Overijse, Hoeilaart, Zaventem,
+Dilbeek, Grimbergen, La Hulpe, Lasne, Waterloo) — soit 31 pages locales.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Laravel 12 · Inertia · Vue 3 · Tailwind CSS 4.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Démarrer
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+npm install
+php artisan migrate
+npm run dev        # ou npm run build en production
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Où modifier le contenu
 
-## Contributing
+| Ce que vous voulez changer | Fichier |
+| --- | --- |
+| Téléphone, adresse, TVA, horaires, réseaux sociaux | `config/company.php` |
+| Prestations, communes desservies, FAQ | `config/site.php` |
+| Textes de la page d'accueil | `resources/js/Pages/Landing.vue` |
+| Textes des pages communes | `resources/js/Pages/Zone.vue` + le champ `intro` de chaque zone |
+| Palette, typographie, composants visuels | `resources/css/app.css` |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Ajouter une commune dans `config/site.php` crée automatiquement sa page
+`/lavage-de-vitres/{slug}`, son entrée de sitemap, ses liens internes et son balisage
+schema.org. Le champ `intro` doit rester **unique** d'une commune à l'autre : deux textes
+identiques seraient traités par Google comme du contenu dupliqué.
 
-## Code of Conduct
+## Référencement
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Métadonnées, `canonical`, Open Graph et JSON-LD sont générés **côté serveur**
+  (`app/Support/Seo.php` → `resources/views/app.blade.php`), donc lisibles sans JavaScript.
+- `/sitemap.xml` et `/robots.txt` sont dynamiques et suivent le domaine défini par `APP_URL`.
+- Données structurées : `LocalBusiness`, `WebSite`, `WebPage`, `BreadcrumbList`, `Service`, `FAQPage`.
 
-## Security Vulnerabilities
+Le NAP (nom, adresse, téléphone) affiché sur le site doit rester **identique au caractère près**
+à celui de la fiche Google Business Profile.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Demandes de devis
 
-## License
+Les formulaires écrivent dans la table `leads` **avant** l'envoi des e-mails : une panne SMTP
+ne fait perdre aucune demande.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan tinker --execute="App\Models\Lead::latest()->take(20)->get(['created_at','name','phone','city','kind'])->each(fn(\$l) => print(\$l->toJson().PHP_EOL));"
+```
+
+Deux points d'entrée : `/contact` (devis complet) et `/rappel` (rappel express, nom + téléphone).
+Les deux sont protégés par un honeypot et limités à 8 envois par minute et par IP.
+
+## Variables d'environnement utiles
+
+```
+APP_URL=https://eloglass.be     # sert de base aux canonical, sitemap et JSON-LD
+MAIL_CONTACT_TO=contact@eloglass.be
+COMPANY_WHATSAPP=32484152073
+GTM_ID=                          # ou GA_ID pour GA4 — laisser vide pour désactiver
+SOCIAL_GOOGLE_PROFILE=           # URL de la fiche Google Business Profile
+```
+
+## Tests
+
+```bash
+php artisan test
+```
+
+Couvre les métadonnées SEO, le sitemap, les pages locales et le parcours de génération de leads
+(y compris la persistance en cas d'échec d'envoi d'e-mail).

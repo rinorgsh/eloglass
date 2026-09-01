@@ -10,11 +10,13 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
             fonts: [
-                bunny('Bricolage Grotesque', {
-                    weights: [400, 500, 600, 700, 800],
+                // Archivo : grotesque légèrement carré, écho au logotype « ELO GLASS ».
+                bunny('Archivo', {
+                    weights: [500, 600, 700, 800],
                 }),
-                bunny('Manrope', {
-                    weights: [400, 500, 600, 700, 800],
+                // Inter : lisibilité maximale des textes courants, y compris sur mobile.
+                bunny('Inter', {
+                    weights: [400, 500, 600, 700],
                 }),
             ],
         }),

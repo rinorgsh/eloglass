@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    /*
+    | Mesure d'audience. Renseignez l'un des deux dans le .env :
+    | GTM_ID pour Google Tag Manager, ou GA_ID pour GA4 directement.
+    */
+    'gtm_id' => env('GTM_ID'),
+    'ga_id' => env('GA_ID'),
+
 ];

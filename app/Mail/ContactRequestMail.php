@@ -14,16 +14,19 @@ class ContactRequestMail extends Mailable
 
     /**
      * @param  array<string, mixed>  $data
+     * @param  string  $kind  'quote' (formulaire complet) ou 'callback' (rappel express)
      */
-    public function __construct(public array $data)
+    public function __construct(public array $data, public string $kind = 'quote')
     {
     }
 
     public function envelope(): Envelope
     {
+        $prefix = $this->kind === 'callback' ? 'Demande de rappel' : 'Nouvelle demande de devis';
+
         return new Envelope(
-            subject: 'Nouvelle demande de devis — '.($this->data['name'] ?? 'Contact').' · '.config('app.name'),
-            replyTo: [$this->data['email']],
+            subject: $prefix.' — '.($this->data['name'] ?? 'Contact').' · '.($this->data['phone'] ?? ''),
+            replyTo: array_filter([$this->data['email'] ?? null]),
         );
     }
 
@@ -31,7 +34,7 @@ class ContactRequestMail extends Mailable
     {
         return new Content(
             markdown: 'mail.contact',
-            with: ['data' => $this->data],
+            with: ['data' => $this->data, 'kind' => $this->kind],
         );
     }
 }

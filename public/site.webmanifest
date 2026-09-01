@@ -1,0 +1,14 @@
+{
+  "name": "Elo Glass — Lavage de vitres",
+  "short_name": "Elo Glass",
+  "description": "Lavage de vitres professionnel en Brabant wallon et à Bruxelles.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a529c",
+  "lang": "fr-BE",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
