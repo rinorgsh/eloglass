@@ -124,6 +124,6 @@ return [
     |
     */
 
-    'contact_to' => env('MAIL_CONTACT_TO', 'contact@eloglass.be'),
+    'contact_to' => env('MAIL_CONTACT_TO', 'info@eloglass.be'),
 
 ];

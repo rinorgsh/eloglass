@@ -60,7 +60,7 @@ Les deux sont protégés par un honeypot et limités à 8 envois par minute et p
 
 ```
 APP_URL=https://eloglass.be     # sert de base aux canonical, sitemap et JSON-LD
-MAIL_CONTACT_TO=contact@eloglass.be
+MAIL_CONTACT_TO=info@eloglass.be
 COMPANY_WHATSAPP=32484152073
 GTM_ID=                          # ou GA_ID pour GA4 — laisser vide pour désactiver
 SOCIAL_GOOGLE_PROFILE=           # URL de la fiche Google Business Profile

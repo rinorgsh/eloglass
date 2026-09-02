@@ -50,7 +50,7 @@ return [
         'international' => '+32 484 15 20 73',
     ],
 
-    'email' => env('MAIL_CONTACT_TO', 'contact@eloglass.be'),
+    'email' => env('MAIL_CONTACT_TO', 'info@eloglass.be'),
 
     /*
     | Horaires affichés + données structurées. À confirmer par le client.
