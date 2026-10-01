@@ -71,6 +71,15 @@ const matchingZones = computed(() => {
     return props.zones.filter((zone) => normalize(zone.city).includes(query) || zone.postal.startsWith(query));
 });
 
+/*
+| Sur mobile, 32 pastilles font une très longue liste : on n'en montre
+| qu'une partie, la recherche ou le bouton donnant accès au reste.
+| (Sur ordinateur, tout est visible : voir la classe `lg:!flex` plus bas.)
+*/
+const MOBILE_ZONES = 10;
+const showAllZones = ref(false);
+const zonesCollapsed = computed(() => ! showAllZones.value && ! zoneQuery.value.trim());
+
 const trust = [
     'Société belge, TVA ' + company.value.vat,
     'Devis gratuit sous ' + company.value.responseTime,
@@ -128,11 +137,11 @@ const timeline = [
         <!-- ══════════════════ HERO ══════════════════ -->
         <section
             ref="hero"
-            class="relative overflow-hidden pt-28 pb-16 sm:pt-32 lg:pt-40 lg:pb-28"
+            class="relative overflow-hidden pt-28 pb-32 sm:pt-32 lg:pt-40 lg:pb-28"
             @pointermove="onHeroMove"
         >
-            <!-- Sur mobile, les ellipses débordent en haut à droite, derrière le titre. -->
-            <OrbitArt class="top-16 -right-40 w-[30rem] opacity-60 lg:hidden" />
+            <!-- Sur mobile, les ellipses occupent le bas du hero, sous le texte, sans le croiser. -->
+            <OrbitArt class="-right-24 -bottom-20 w-[17rem] opacity-60 lg:hidden" />
 
             <div class="wrap relative grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
                 <div class="lg:col-span-7">
@@ -276,7 +285,11 @@ const timeline = [
                 </div>
 
                 <TransitionGroup tag="ul" name="commune" class="relative mt-10 flex flex-wrap gap-2.5">
-                    <li v-for="zone in matchingZones" :key="zone.slug">
+                    <li
+                        v-for="(zone, index) in matchingZones"
+                        :key="zone.slug"
+                        :class="{ 'max-lg:hidden': zonesCollapsed && index >= MOBILE_ZONES }"
+                    >
                         <Link
                             :href="'/nettoyage/' + zone.slug"
                             class="inline-flex min-h-11 items-center gap-2 rounded-full border border-filet bg-white px-4 text-[0.95rem] text-marine-900 transition-colors duration-200 hover:border-marine-900 hover:bg-marine-900 hover:text-white"
@@ -286,6 +299,15 @@ const timeline = [
                         </Link>
                     </li>
                 </TransitionGroup>
+
+                <button
+                    v-if="zonesCollapsed && zones.length > MOBILE_ZONES"
+                    type="button"
+                    class="btn btn-ghost mt-5 w-full lg:hidden"
+                    @click="showAllZones = true"
+                >
+                    Afficher les {{ zones.length }} communes
+                </button>
 
                 <p v-if="! matchingZones.length" class="mt-2 text-encre-600" role="status">
                     Cette commune n’est pas dans notre liste. Appelez le
@@ -315,9 +337,9 @@ const timeline = [
                                 <Phone class="mt-1 size-5 shrink-0 text-sauge-600" stroke-width="1.5" aria-hidden="true" />
                                 <div>
                                     <dt class="text-sm text-encre-600">Téléphone</dt>
-                                    <dd class="mt-0.5 font-display text-2xl text-marine-900">
+                                    <dd class="mt-0.5 flex flex-col items-start gap-1 font-display text-2xl text-marine-900 sm:flex-row sm:items-baseline sm:gap-0">
                                         <a :href="phoneHref" class="lien" data-lead-cta="devis-call">{{ phone }}</a>
-                                        <span class="px-2 text-encre-400" aria-hidden="true">/</span>
+                                        <span class="hidden px-2 text-encre-400 sm:inline" aria-hidden="true">/</span>
                                         <a :href="phone2Href" class="lien" data-lead-cta="devis-call-2">{{ phone2 }}</a>
                                     </dd>
                                 </div>

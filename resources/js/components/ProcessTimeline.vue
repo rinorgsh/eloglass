@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
                 <Sparkle class="size-2.5 transition-transform duration-500" :class="reached(i) ? 'scale-100' : 'scale-0'" />
             </span>
 
-            <div class="transition-opacity duration-500" :class="reached(i) ? 'opacity-100' : 'opacity-45'">
+            <div class="transition-opacity duration-500" :class="reached(i) ? 'opacity-100' : 'opacity-60'">
                 <p class="text-sm font-medium text-sauge-200">{{ step.when }}</p>
                 <h3 class="mt-1 font-display text-[length:var(--step-h3)] text-white">{{ step.title }}</h3>
                 <p class="mt-2 max-w-md leading-relaxed text-white/70">{{ step.text }}</p>

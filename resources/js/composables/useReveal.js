@@ -23,7 +23,8 @@ export function useReveal() {
                     }
                 });
             },
-            { threshold: 0.1, rootMargin: '0px 0px -32px 0px' },
+            // Seuil nul : un bloc plus haut que l'écran (formulaire sur mobile) apparaît dès qu'il entre.
+            { threshold: 0, rootMargin: '0px 0px -24px 0px' },
         );
 
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));

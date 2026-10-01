@@ -54,7 +54,7 @@
 
 @layer base {
     :root {
-        --step-h1: clamp(2.35rem, 1.4rem + 4.4vw, 5rem);
+        --step-h1: clamp(2.6rem, 1.4rem + 4.4vw, 5rem);
         --step-h2: clamp(2.1rem, 1.5rem + 2.6vw, 3.6rem);
         --step-h3: clamp(1.45rem, 1.3rem + 0.6vw, 1.8rem);
         --step-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
@@ -66,6 +66,12 @@
         /* Compense l'en-tête fixe lors des ancres. */
         scroll-padding-top: 5.5rem;
         -webkit-text-size-adjust: 100%;
+    }
+
+    /* Aucun élément décoratif ne doit faire défiler la page de côté sur mobile. */
+    html,
+    body {
+        overflow-x: clip;
     }
 
     body {

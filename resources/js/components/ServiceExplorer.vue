@@ -45,13 +45,13 @@ function onTabKeydown(event) {
 </script>
 
 <template>
-    <div class="grid gap-8 lg:grid-cols-12 lg:gap-16">
-        <!-- Familles -->
-        <div class="lg:col-span-4">
+    <div class="grid gap-7 lg:grid-cols-12 lg:gap-16">
+        <!-- Familles : pastilles sur mobile, grande liste verticale sur ordinateur. -->
+        <div class="min-w-0 lg:col-span-4">
             <div
                 role="tablist"
                 aria-label="Familles de prestations"
-                class="-mx-5 flex gap-7 overflow-x-auto px-5 pb-1 lg:sticky lg:top-28 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0"
+                class="flex flex-wrap gap-2 lg:sticky lg:top-28 lg:flex-col lg:flex-nowrap lg:gap-1"
                 @keydown="onTabKeydown"
             >
                 <button
@@ -63,8 +63,10 @@ function onTabKeydown(event) {
                     :aria-selected="active === key"
                     :aria-controls="'prestations-liste'"
                     :tabindex="active === key ? 0 : -1"
-                    class="onglet group flex shrink-0 items-center gap-3 py-2 text-left font-display text-[1.75rem] leading-tight whitespace-nowrap transition-colors duration-300 lg:text-[2.5rem]"
-                    :class="active === key ? 'text-marine-900' : 'text-encre-400 hover:text-marine-700'"
+                    class="onglet group flex min-h-11 items-center gap-3 rounded-full border px-4 text-left text-[0.95rem] font-medium whitespace-nowrap transition-colors duration-300 lg:min-h-0 lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-2 lg:font-display lg:text-[2.5rem] lg:leading-tight"
+                    :class="active === key
+                        ? 'border-marine-900 bg-marine-900 text-white lg:text-marine-900'
+                        : 'border-filet bg-white text-marine-900 lg:text-encre-400 lg:hover:text-marine-700'"
                     @click="active = key"
                 >
                     <Sparkle
@@ -77,7 +79,7 @@ function onTabKeydown(event) {
         </div>
 
         <!-- Prestations de la famille active -->
-        <div id="prestations-liste" role="tabpanel" :aria-labelledby="'famille-' + active" class="lg:col-span-8">
+        <div id="prestations-liste" role="tabpanel" :aria-labelledby="'famille-' + active" class="min-w-0 lg:col-span-8">
             <Transition name="famille" mode="out-in">
                 <div :key="active">
                     <p class="lead max-w-xl">{{ families[active].lead }}</p>
@@ -92,7 +94,7 @@ function onTabKeydown(event) {
                             <h3 class="font-sans text-base font-normal tracking-normal">
                                 <button
                                     type="button"
-                                    class="flex w-full items-center gap-4 py-5 text-left sm:gap-5"
+                                    class="flex min-h-11 w-full items-center gap-4 py-4 text-left sm:gap-5 sm:py-5"
                                     :aria-expanded="open === service.slug"
                                     :aria-controls="'detail-' + service.slug"
                                     @click="toggle(service.slug)"
@@ -149,14 +151,16 @@ function onTabKeydown(event) {
 </template>
 
 <style scoped>
-/* Le trait sous l'onglet actif se trace de gauche à droite. */
-.onglet-texte {
-    background: linear-gradient(var(--color-sauge-600), var(--color-sauge-600)) 0 100% / 0 1.5px no-repeat;
-    padding-bottom: 0.15em;
-    transition: background-size 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.onglet-texte.est-actif {
-    background-size: 100% 1.5px;
+/* Sur ordinateur, le trait sous l'onglet actif se trace de gauche à droite. */
+@media (min-width: 1024px) {
+    .onglet-texte {
+        background: linear-gradient(var(--color-sauge-600), var(--color-sauge-600)) 0 100% / 0 1.5px no-repeat;
+        padding-bottom: 0.15em;
+        transition: background-size 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .onglet-texte.est-actif {
+        background-size: 100% 1.5px;
+    }
 }
 
 .detail {
