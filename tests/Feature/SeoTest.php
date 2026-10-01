@@ -25,7 +25,7 @@ class SeoTest extends TestCase
 
             $response->assertOk();
             $response->assertSee('Nettoyage à '.e($zone['city']), false);
-            $response->assertSee('https://eloglass.be/nettoyage/'.$zone['slug'], false);
+            $response->assertSee('https://companyclean.be/nettoyage/'.$zone['slug'], false);
         }
     }
 
@@ -96,6 +96,6 @@ class SeoTest extends TestCase
     {
         $this->get('/robots.txt')
             ->assertOk()
-            ->assertSee('Sitemap: https://eloglass.be/sitemap.xml', false);
+            ->assertSee('Sitemap: https://companyclean.be/sitemap.xml', false);
     }
 }

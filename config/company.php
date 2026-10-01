@@ -57,7 +57,7 @@ return [
         'international' => '+32 477 97 27 91',
     ],
 
-    'email' => env('MAIL_CONTACT_TO', 'info@eloglass.be'),
+    'email' => env('MAIL_CONTACT_TO', 'info@companyclean.be'),
 
     /*
     | Horaires affichés + données structurées. À confirmer par le client.
