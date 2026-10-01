@@ -17,114 +17,123 @@ return [
     |----------------------------------------------------------------------
     | Prestations
     |----------------------------------------------------------------------
-    | Deux familles : 'vitres' et 'bureaux'. Le champ 'family' sert au
-    | regroupement à l'écran et dans le sélecteur du formulaire ; le reste
-    | du site (JSON-LD, pages locales) consomme la liste à plat.
+    | Trois familles : 'maison', 'entreprise' et 'ponctuel'. Le champ 'family'
+    | sert au regroupement à l'écran et dans le sélecteur du formulaire ; le
+    | reste du site (JSON-LD, pages locales) consomme la liste à plat.
     |
     | 'icon' correspond à un composant lucide-vue-next.
     */
     'families' => [
-        'vitres' => [
-            'label' => 'Lavage de vitres',
-            'lead' => 'Toutes les surfaces vitrées, à l\'eau osmosée, sans traces ni résidus.',
+        'maison' => [
+            'label' => 'À la maison',
+            'lead' => 'Votre maison ou votre appartement, entretenu au rythme qui vous convient.',
         ],
-        'bureaux' => [
-            'label' => 'Nettoyage de bureaux',
-            'lead' => 'L\'entretien complet de vos locaux, en contrat régulier ou en remise en état.',
+        'entreprise' => [
+            'label' => 'En entreprise',
+            'lead' => 'Bureaux, commerces et immeubles, en contrat régulier et en dehors de vos heures d\'activité.',
+        ],
+        'ponctuel' => [
+            'label' => 'Travaux ponctuels',
+            'lead' => 'Une remise en état, un chantier qui se termine, des surfaces difficiles d\'accès.',
         ],
     ],
 
     'services' => [
         [
-            'slug' => 'vitres-residentielles',
-            'family' => 'vitres',
+            'slug' => 'menage-regulier',
+            'family' => 'maison',
             'icon' => 'Home',
-            'title' => 'Vitres de maison',
-            'short' => 'Fenêtres, baies vitrées et châssis',
-            'text' => 'Fenêtres, baies vitrées, châssis et encadrements de votre habitation, nettoyés sans traces ni résidus, intérieur comme extérieur.',
+            'title' => 'Ménage régulier',
+            'short' => 'Chaque semaine ou toutes les deux semaines',
+            'text' => 'Poussières, sols, cuisine et salle de bain, au rythme que vous choisissez. La même personne revient à chaque passage et connaît votre intérieur.',
         ],
         [
-            'slug' => 'vitrines-commerciales',
-            'family' => 'vitres',
-            'icon' => 'Store',
-            'title' => 'Vitrines de commerce',
-            'short' => 'Devantures, en ponctuel ou en contrat',
-            'text' => 'Des devantures impeccables qui valorisent votre commerce. Passage ponctuel ou entretien régulier (hebdomadaire, bimensuel, mensuel).',
+            'slug' => 'grand-nettoyage',
+            'family' => 'maison',
+            'icon' => 'Sparkles',
+            'title' => 'Grand nettoyage',
+            'short' => 'De fond en comble, une fois ou à chaque saison',
+            'text' => 'Derrière les meubles, plinthes, portes, intérieur des armoires, four et hotte : tout ce que le ménage courant ne touche pas.',
         ],
         [
-            'slug' => 'immeubles-bureaux',
-            'family' => 'vitres',
-            'icon' => 'Building2',
-            'title' => 'Immeubles & bureaux',
-            'short' => 'Halls, plateaux, parties communes',
-            'text' => 'Surfaces vitrées de vos bureaux, halls d\'entrée et parties communes, nettoyées en toute discrétion, en dehors des heures d\'affluence si besoin.',
-        ],
-        [
-            'slug' => 'verandas-verrieres',
-            'family' => 'vitres',
+            'slug' => 'vitres-verandas',
+            'family' => 'maison',
             'icon' => 'Frame',
-            'title' => 'Vérandas & verrières',
-            'short' => 'Vitrages en hauteur et toitures',
-            'text' => 'Toitures de véranda, verrières et vitrages en hauteur remis à neuf grâce aux perches télescopiques, sans échafaudage ni dégâts.',
+            'title' => 'Vitres et vérandas',
+            'short' => 'Fenêtres, baies, châssis et toitures vitrées',
+            'text' => 'Vitres lavées à l\'eau osmosée, intérieur et extérieur, châssis et appuis compris. Les toitures de véranda se font à la perche, depuis le sol.',
         ],
         [
-            'slug' => 'panneaux-solaires',
-            'family' => 'vitres',
-            'icon' => 'SunMedium',
-            'title' => 'Panneaux photovoltaïques',
-            'short' => 'Jusqu\'à +20 % de rendement',
-            'text' => 'Des panneaux encrassés produisent moins. Nettoyage doux à l\'eau osmosée, sans détergent agressif ni rayure sur le verre.',
+            'slug' => 'fin-de-bail',
+            'family' => 'maison',
+            'icon' => 'KeyRound',
+            'title' => 'Fin de bail et déménagement',
+            'short' => 'Avant l\'état des lieux de sortie',
+            'text' => 'Le logement est rendu propre pièce par pièce : sols, sanitaires, cuisine, vitres intérieures et placards vidés.',
         ],
-        [
-            'slug' => 'nettoyage-apres-chantier',
-            'family' => 'vitres',
-            'icon' => 'HardHat',
-            'title' => 'Nettoyage après chantier',
-            'short' => 'Étiquettes, ciment, peinture',
-            'text' => 'Retrait des étiquettes, résidus de ciment, silicone, peinture et poussières de ponçage après vos travaux de construction ou de rénovation.',
-        ],
-
-        /* ---------------- Nettoyage de bureaux ---------------- */
-
         [
             'slug' => 'entretien-bureaux',
-            'family' => 'bureaux',
+            'family' => 'entreprise',
             'icon' => 'Briefcase',
             'title' => 'Entretien de bureaux',
-            'short' => 'Plateaux, postes de travail, poubelles',
-            'text' => 'Nettoyage régulier de vos plateaux : bureaux, écrans, poubelles et corbeilles de tri, salles de réunion. Passage quotidien, hebdomadaire ou selon le rythme que vous fixez.',
+            'short' => 'Postes de travail, salles de réunion, poubelles',
+            'text' => 'Passage quotidien, hebdomadaire ou selon votre rythme, tôt le matin ou en soirée pour ne déranger personne.',
         ],
         [
-            'slug' => 'sanitaires-cuisines',
-            'family' => 'bureaux',
-            'icon' => 'SprayCan',
-            'title' => 'Sanitaires & cuisines',
-            'short' => 'Désinfection et réapprovisionnement',
-            'text' => 'Toilettes, lavabos, coins café et kitchenettes nettoyés et désinfectés. Réapprovisionnement du papier, du savon et des essuie-mains si vous le souhaitez.',
-        ],
-        [
-            'slug' => 'sols-moquettes',
-            'family' => 'bureaux',
-            'icon' => 'Footprints',
-            'title' => 'Sols & moquettes',
-            'short' => 'Aspiration, lavage, shampouinage',
-            'text' => 'Aspiration et lavage des sols durs, shampouinage des moquettes et tapis d\'entrée. Traitement des taches avant qu\'elles ne s\'incrustent.',
+            'slug' => 'commerces-vitrines',
+            'family' => 'entreprise',
+            'icon' => 'Store',
+            'title' => 'Commerces et vitrines',
+            'short' => 'Devanture et surface de vente',
+            'text' => 'Vitrine, sol et comptoir prêts avant l\'ouverture. En passage ponctuel ou en contrat hebdomadaire, bimensuel ou mensuel.',
         ],
         [
             'slug' => 'parties-communes',
-            'family' => 'bureaux',
+            'family' => 'entreprise',
             'icon' => 'Building',
-            'title' => 'Parties communes',
+            'title' => 'Immeubles et parties communes',
             'short' => 'Halls, escaliers, ascenseurs',
-            'text' => 'Halls d\'entrée, cages d\'escalier, ascenseurs et couloirs d\'immeubles de bureaux ou de logements. Nous travaillons aussi pour les syndics et les gestionnaires.',
+            'text' => 'Entretien des halls d\'entrée, cages d\'escalier, ascenseurs et couloirs, pour les syndics, les gestionnaires et les copropriétés.',
         ],
         [
-            'slug' => 'remise-en-etat',
-            'family' => 'bureaux',
-            'icon' => 'PackageOpen',
-            'title' => 'Remise en état',
-            'short' => 'Fin de bail, déménagement',
-            'text' => 'Nettoyage complet avant un état des lieux de sortie ou après un déménagement : sols, sanitaires, vitrages intérieurs et dépoussiérage en hauteur.',
+            'slug' => 'sanitaires-cuisines',
+            'family' => 'entreprise',
+            'icon' => 'SprayCan',
+            'title' => 'Sanitaires et cuisines',
+            'short' => 'Désinfection et réapprovisionnement',
+            'text' => 'Toilettes, lavabos, coins café et kitchenettes nettoyés et désinfectés. Papier, savon et essuie-mains réapprovisionnés si vous le souhaitez.',
+        ],
+        [
+            'slug' => 'apres-chantier',
+            'family' => 'ponctuel',
+            'icon' => 'HardHat',
+            'title' => 'Nettoyage après chantier',
+            'short' => 'Poussière, ciment, peinture, étiquettes',
+            'text' => 'Après une construction ou une rénovation : poussières de ponçage, résidus de ciment, de silicone et de peinture, étiquettes sur les vitrages.',
+        ],
+        [
+            'slug' => 'sols-moquettes',
+            'family' => 'ponctuel',
+            'icon' => 'Footprints',
+            'title' => 'Sols, moquettes et tapis',
+            'short' => 'Lavage, décapage, shampouinage',
+            'text' => 'Lavage et décapage des sols durs, shampouinage des moquettes et des tapis, traitement des taches avant qu\'elles ne s\'incrustent.',
+        ],
+        [
+            'slug' => 'vitres-en-hauteur',
+            'family' => 'ponctuel',
+            'icon' => 'Building2',
+            'title' => 'Vitres en hauteur',
+            'short' => 'Façades vitrées et verrières',
+            'text' => 'Les vitrages jusqu\'à trois étages environ se nettoient depuis le sol, à la perche télescopique, sans échafaudage ni nacelle.',
+        ],
+        [
+            'slug' => 'panneaux-solaires',
+            'family' => 'ponctuel',
+            'icon' => 'SunMedium',
+            'title' => 'Panneaux photovoltaïques',
+            'short' => 'Nettoyage doux, sans détergent',
+            'text' => 'Des panneaux encrassés produisent moins. Nous les lavons à l\'eau osmosée, sans détergent agressif ni rayure sur le verre.',
         ],
     ],
 
@@ -132,8 +141,8 @@ return [
     |----------------------------------------------------------------------
     | Zones d'intervention — pages locales
     |----------------------------------------------------------------------
-    | Chaque entrée génère une page /lavage-de-vitres/{slug} optimisée pour
-    | la requête « lavage de vitres {commune} ».
+    | Chaque entrée génère une page /nettoyage/{slug} optimisée pour
+    | la requête « nettoyage {commune} ».
     |
     | 'intro' et 'focus' doivent rester UNIQUES d'une commune à l'autre :
     | deux textes identiques seraient traités comme du contenu dupliqué.
@@ -385,8 +394,8 @@ return [
             'city' => 'Lasne',
             'postal' => '1380',
             'province' => 'Périphérie',
-            'intro' => "Elo Glass est établie Route de l'Etat, à Lasne. C'est notre point de départ vers Bruxelles, et la commune où nous pouvons caler un créneau à très court terme.",
-            'focus' => "Villas avec grandes baies, vérandas, maisons quatre façades et commerces du centre : nous connaissons le bâti de la commune.",
+            'intro' => "Lasne, ce sont des villas entourées de jardins, de grandes baies ouvertes sur la campagne et des vérandas exposées aux feuilles et à la poussière des chemins.",
+            'focus' => "Maisons quatre façades, fermettes rénovées et commerces du centre : nous prévoyons le temps qu'il faut pour les grandes surfaces vitrées.",
             'areas' => ['Ohain', 'Plancenoit', 'Couture-Saint-Germain', 'Maransart', 'Chapelle-Saint-Lambert'],
         ],
         [
@@ -425,6 +434,16 @@ return [
             'focus' => "Commerces et petites entreprises y prennent souvent un passage mensuel : c'est le meilleur rapport propreté-budget pour une vitrine.",
             'areas' => ['Strombeek-Bever', 'Beigem', 'Humbeek', 'Borgt'],
         ],
+        [
+            'slug' => 'londerzeel',
+            'city' => 'Londerzeel',
+            'postal' => '1840',
+            'province' => 'Périphérie',
+            'primary' => true,
+            'intro' => "Clean Company est établie Watermolenstraat, à Londerzeel. C'est notre point de départ : nous pouvons y caler un passage à très court terme, pour une maison comme pour un commerce.",
+            'focus' => "Maisons du centre, lotissements de Malderen et de Steenhuffel, entreprises le long de l'A12 : nous connaissons la commune rue par rue.",
+            'areas' => ['Centre', 'Malderen', 'Steenhuffel', 'Sint-Jozef'],
+        ],
     ],
 
     /*
@@ -434,52 +453,48 @@ return [
     */
     'faq' => [
         [
-            'q' => 'Combien coûte un lavage de vitres ?',
-            'a' => "Le prix dépend du nombre de vitres, de leur accessibilité et de leur état. Pour une maison, comptez en général entre 80 € et 200 € par passage. Le devis est gratuit, sans engagement, et le prix annoncé est celui que vous payez : il n'y a pas de supplément découvert sur place.",
+            'q' => "Combien coûte un nettoyage ?",
+            'a' => "Le prix dépend de la surface, de l'état des lieux et de la fréquence. Nous vous donnons un montant ferme après avoir vu quelques photos ou, pour un contrat régulier, après une courte visite. Le devis est gratuit et sans engagement, et le prix annoncé est celui que vous payez.",
         ],
         [
-            'q' => 'Intervenez-vous chez les particuliers comme chez les professionnels ?',
-            'a' => "Oui, les deux. Nous lavons les vitres des maisons et des appartements, et nous assurons l'entretien complet des bureaux, commerces et immeubles : vitrines, plateaux, sanitaires, sols et parties communes, en passage ponctuel ou en contrat régulier.",
+            'q' => "Travaillez-vous pour les particuliers et pour les entreprises ?",
+            'a' => "Oui, les deux. Nous faisons le ménage et le grand nettoyage des maisons et des appartements, et nous entretenons les bureaux, les commerces et les immeubles, en passage ponctuel ou en contrat régulier.",
         ],
         [
-            'q' => 'À quelle fréquence faut-il faire nettoyer ses vitres ?',
-            'a' => "Pour une habitation, deux à quatre passages par an suffisent, idéalement au printemps après les pollens et à l'automne. Pour une vitrine commerciale à Bruxelles, un passage toutes les une à deux semaines est nécessaire pour rester impeccable : la poussière de trafic salit très vite.",
+            'q' => "Est-ce la même personne qui vient à chaque passage ?",
+            'a' => "Oui, autant que possible. Pour un ménage régulier ou un contrat de bureaux, la même personne revient : elle connaît les lieux, vos habitudes et les points auxquels vous tenez.",
         ],
         [
-            'q' => 'Nettoyez-vous aussi les châssis et les encadrements ?',
-            'a' => "Oui. Le nettoyage des châssis, des encadrements et des appuis de fenêtre est compris dans la prestation : une vitre parfaite dans un châssis sale ne donne aucun résultat visuel.",
+            'q' => "Faut-il être présent pendant le nettoyage ?",
+            'a' => "Non. Beaucoup de clients nous confient une clé ou un code. Pour un premier passage, nous préférons faire le tour des lieux avec vous.",
         ],
         [
-            'q' => 'Comment nettoyez-vous les vitres en hauteur ?',
-            'a' => "Avec des perches télescopiques alimentées en eau osmosée, qui permettent d'atteindre les vitrages jusqu'à environ trois étages depuis le sol, sans échafaudage ni nacelle. C'est plus rapide, moins cher et sans risque pour vos façades et vos plantations.",
+            'q' => "Apportez-vous le matériel et les produits ?",
+            'a' => "Oui, nous venons avec notre matériel et nos produits. Si vous préférez que nous utilisions les vôtres, dites-le simplement au moment du devis.",
         ],
         [
-            'q' => "Qu'est-ce que l'eau osmosée et pourquoi l'utiliser ?",
-            'a' => "C'est une eau totalement déminéralisée, débarrassée du calcaire et des minéraux. Elle sèche seule sans laisser la moindre trace, sans besoin de raclette ni de produit chimique. C'est la méthode utilisée aujourd'hui par les professionnels du vitrage.",
+            'q' => "Comment fonctionne un contrat d'entretien de bureaux ?",
+            'a' => "Nous convenons ensemble de ce qu'il y a à nettoyer, de la fréquence et des horaires, en général tôt le matin ou en soirée. Vous avez un prix mensuel fixe et un seul interlocuteur.",
         ],
         [
-            'q' => 'Faut-il être présent pendant le nettoyage ?',
-            'a' => "Pour l'extérieur uniquement, non : votre présence n'est pas nécessaire tant que l'accès au terrain est possible. Pour l'intérieur, il faut évidemment quelqu'un sur place. Beaucoup de nos clients nous confient simplement un code ou une clé.",
+            'q' => "Nettoyez-vous aussi les vitres ?",
+            'a' => "Oui. Nous lavons les vitres à l'eau osmosée, une eau déminéralisée qui sèche sans laisser de trace. Les châssis et les appuis de fenêtre sont compris. Les vitrages en hauteur se font à la perche télescopique, depuis le sol.",
         ],
         [
-            'q' => 'Dans quelles communes intervenez-vous ?',
-            'a' => "Nous couvrons les 19 communes de la Région de Bruxelles-Capitale ainsi que toute la périphérie : Rhode-Saint-Genèse, Kraainem, Wezembeek-Oppem, Tervuren, Overijse, Hoeilaart, Zaventem, Dilbeek, Grimbergen, La Hulpe, Lasne et Waterloo.",
+            'q' => "Faites-vous le nettoyage après des travaux ?",
+            'a' => "Oui. Nous retirons les poussières de ponçage, les résidus de ciment, de silicone et de peinture, et les étiquettes sur les vitrages, pour que les lieux soient habitables ou prêts à être livrés.",
         ],
         [
-            'q' => 'Faites-vous aussi le nettoyage de bureaux, ou seulement les vitres ?',
-            'a' => "Les deux. Le lavage de vitres est notre spécialité, mais nous assurons également l'entretien complet de locaux professionnels : bureaux et postes de travail, sanitaires et cuisines, sols et moquettes, parties communes, salles de réunion. La plupart de nos clients professionnels nous confient les deux, ce qui leur évite de gérer deux prestataires.",
+            'q' => "Dans quelles communes intervenez-vous ?",
+            'a' => "Dans les 19 communes de la Région de Bruxelles-Capitale et autour de Bruxelles : Londerzeel, Grimbergen, Dilbeek, Zaventem, Kraainem, Wezembeek-Oppem, Tervuren, Overijse, Hoeilaart, Rhode-Saint-Genèse, La Hulpe, Lasne et Waterloo. Si votre commune n'est pas dans la liste, appelez-nous.",
         ],
         [
-            'q' => 'Comment fonctionne un contrat d\'entretien de bureaux ?',
-            'a' => "Nous convenons ensemble du périmètre, de la fréquence (quotidienne, plusieurs fois par semaine, hebdomadaire) et des horaires — généralement tôt le matin ou en soirée, pour ne gêner personne. Vous avez un prix mensuel fixe, le même intervenant à chaque passage, et aucun engagement de longue durée.",
+            'q' => "Sous quel délai recevrai-je mon devis ?",
+            'a' => "Nous répondons à toute demande sous 24 h ouvrables. Pour la plupart des maisons, quelques photos suffisent à établir un prix ferme sans visite.",
         ],
         [
-            'q' => 'Sous quel délai recevrai-je mon devis ?',
-            'a' => "Nous répondons à toute demande sous 24 h ouvrables. Pour la plupart des maisons et des vitrines, quelques photos et le nombre de fenêtres suffisent à établir un prix ferme sans visite préalable.",
-        ],
-        [
-            'q' => 'Êtes-vous assurés ?',
-            'a' => "Oui, Elo Glass SRL est une société enregistrée à la Banque-Carrefour des Entreprises sous le numéro 0475.199.436 et couverte en responsabilité civile professionnelle pour l'ensemble de ses interventions.",
+            'q' => "Que se passe-t-il si je ne suis pas satisfait ?",
+            'a' => "Dites-le-nous dans les jours qui suivent : nous repassons sur ce qui n'a pas été bien fait, sans supplément.",
         ],
     ],
 

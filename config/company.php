@@ -14,40 +14,47 @@
 
 return [
 
-    'legal_name' => 'ELO GLASS SRL',
-    'name' => 'Elo Glass',
-    'tagline' => 'Lavage de vitres & nettoyage de bureaux',
+    'legal_name' => 'Clean Company',
+    'name' => 'Clean Company',
+    'tagline' => 'Nettoyage de maisons, de bureaux et de vitres',
 
     /*
-    | Numéro d'entreprise / TVA (BCE : 0475.199.436)
+    | Numéro d'entreprise / TVA (BCE : 1043.205.603)
     */
-    'vat' => 'BE 0475.199.436',
-    'vat_raw' => 'BE0475199436',
-    'bce' => '0475.199.436',
-    'legal_form' => 'Société à responsabilité limitée',
+    'vat' => 'BE 1043.205.603',
+    'vat_raw' => 'BE1043205603',
+    'bce' => '1043.205.603',
+    // Forme juridique à confirmer par le client : laissée vide, elle n'est pas affichée.
+    'legal_form' => null,
 
     'address' => [
-        'street' => "Route de l'Etat 11",
-        'postal_code' => '1380',
-        'city' => 'Lasne',
-        'region' => 'Brabant wallon',
+        'street' => 'Watermolenstraat 16',
+        'postal_code' => '1840',
+        'city' => 'Londerzeel',
+        'region' => 'Brabant flamand',
         'country' => 'Belgique',
         'country_code' => 'BE',
     ],
 
     /*
-    | Coordonnées approximatives du centre de Lasne. À affiner avec les
+    | Coordonnées approximatives du centre de Londerzeel. À affiner avec les
     | coordonnées exactes de la fiche Google Business Profile.
     */
     'geo' => [
-        'lat' => 50.6833,
-        'lng' => 4.4667,
+        'lat' => 51.0047,
+        'lng' => 4.3003,
     ],
 
     'phone' => [
         'display' => '0484 15 20 73',
         'e164' => '+32484152073',
         'international' => '+32 484 15 20 73',
+    ],
+
+    'phone_secondary' => [
+        'display' => '0477 97 27 91',
+        'e164' => '+32477972791',
+        'international' => '+32 477 97 27 91',
     ],
 
     'email' => env('MAIL_CONTACT_TO', 'info@eloglass.be'),

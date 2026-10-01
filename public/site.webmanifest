@@ -1,11 +1,11 @@
 {
-  "name": "Elo Glass — Lavage de vitres",
-  "short_name": "Elo Glass",
-  "description": "Lavage de vitres professionnel en Brabant wallon et à Bruxelles.",
+  "name": "Clean Company — Nettoyage",
+  "short_name": "Clean Company",
+  "description": "Nettoyage de maisons, de bureaux et de vitres à Bruxelles et en périphérie.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0a529c",
+  "background_color": "#fcfcf9",
+  "theme_color": "#06234f",
   "lang": "fr-BE",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },

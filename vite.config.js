@@ -10,13 +10,13 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
             fonts: [
-                // Archivo : grotesque légèrement carré, écho au logotype « ELO GLASS ».
-                bunny('Archivo', {
-                    weights: [500, 600, 700, 800],
+                // Cormorant Garamond : serif à forts contrastes, écho au mot « CLEAN » du logo.
+                bunny('Cormorant Garamond', {
+                    weights: [500, 600],
                 }),
-                // Inter : lisibilité maximale des textes courants, y compris sur mobile.
-                bunny('Inter', {
-                    weights: [400, 500, 600, 700],
+                // Jost : linéale géométrique, écho au mot « COMPANY ».
+                bunny('Jost', {
+                    weights: [400, 500, 600],
                 }),
             ],
         }),

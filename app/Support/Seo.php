@@ -23,6 +23,7 @@ class Seo
         string $path = '/',
         array $breadcrumbs = [],
         ?string $image = null,
+        bool $index = true,
     ): array {
         $url = self::url($path);
 
@@ -32,6 +33,9 @@ class Seo
             'canonical' => $url,
             'image' => $image ? self::url($image) : self::url('/og-image.jpg'),
             'breadcrumbs' => $breadcrumbs,
+            'robots' => $index
+                ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+                : 'noindex, follow',
         ];
     }
 
@@ -83,7 +87,7 @@ class Seo
                     '@type' => 'Service',
                     'name' => $service['title'],
                     'description' => $service['text'],
-                    'serviceType' => $service['family'] === 'bureaux' ? 'Nettoyage de bureaux' : 'Lavage de vitres',
+                    'serviceType' => config('site.families.'.$service['family'].'.label'),
                 ],
             ];
         }
@@ -94,7 +98,7 @@ class Seo
             'name' => $company['name'],
             'legalName' => $company['legal_name'],
             'alternateName' => $company['name'].' — '.$company['tagline'],
-            'description' => 'Lavage de vitres et nettoyage de bureaux pour particuliers et professionnels à Bruxelles et en périphérie. Vitrines, vérandas, panneaux solaires, entretien de locaux, sanitaires, sols et parties communes. Devis gratuit.',
+            'description' => 'Nettoyage pour particuliers et entreprises à Bruxelles et en périphérie : ménage, grand nettoyage, bureaux, commerces, parties communes, vitres et nettoyage après chantier. Devis gratuit.',
             'url' => $siteUrl.'/',
             'logo' => [
                 '@type' => 'ImageObject',
@@ -111,7 +115,6 @@ class Seo
             'taxID' => $company['bce'],
             'priceRange' => $company['price_range'],
             'currenciesAccepted' => 'EUR',
-            'paymentAccepted' => 'Virement bancaire, Bancontact, Espèces',
             'address' => [
                 '@type' => 'PostalAddress',
                 'streetAddress' => $company['address']['street'],
@@ -131,7 +134,7 @@ class Seo
             'sameAs' => $company['social'],
             'hasOfferCatalog' => [
                 '@type' => 'OfferCatalog',
-                'name' => 'Lavage de vitres et nettoyage de bureaux',
+                'name' => 'Prestations de nettoyage',
                 'itemListElement' => $offers,
             ],
             'potentialAction' => [
@@ -249,7 +252,7 @@ class Seo
     public static function localServiceNode(
         array $zone,
         string $canonical,
-        string $serviceType = 'Lavage de vitres',
+        string $serviceType = 'Nettoyage',
         string $anchor = 'service',
         ?string $description = null,
     ): array {
@@ -268,7 +271,6 @@ class Seo
                     '@type' => 'PostalAddress',
                     'postalCode' => $zone['postal'],
                     'addressLocality' => $zone['city'],
-                    'addressRegion' => $zone['province'],
                     'addressCountry' => 'BE',
                 ],
             ],

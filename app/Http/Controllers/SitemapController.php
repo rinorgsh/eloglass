@@ -9,22 +9,21 @@ class SitemapController extends Controller
 {
     public function __invoke(): Response
     {
-        $lastmod = date('Y-m-d');
+        // Date de dernière modification réelle du contenu, pas la date du jour.
+        $lastmod = date('Y-m-d', max(filemtime(config_path('site.php')), filemtime(config_path('company.php'))));
 
         $urls = [
             ['loc' => Seo::url('/'), 'priority' => '1.0', 'freq' => 'weekly'],
-            ['loc' => Seo::url('/lavage-de-vitres'), 'priority' => '0.8', 'freq' => 'monthly'],
+            ['loc' => Seo::url('/nettoyage'), 'priority' => '0.8', 'freq' => 'monthly'],
         ];
 
         foreach (config('site.zones') as $zone) {
             $urls[] = [
-                'loc' => Seo::url('/lavage-de-vitres/'.$zone['slug']),
+                'loc' => Seo::url('/nettoyage/'.$zone['slug']),
                 'priority' => ($zone['primary'] ?? false) ? '0.9' : '0.8',
                 'freq' => 'monthly',
             ];
         }
-
-        $urls[] = ['loc' => Seo::url('/mentions-legales'), 'priority' => '0.2', 'freq' => 'yearly'];
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";

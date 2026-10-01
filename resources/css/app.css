@@ -6,61 +6,59 @@
 
 /*
 |------------------------------------------------------------------------------
-| Système « Verre & lumière »
+| Système « Clean Company »
 |------------------------------------------------------------------------------
-| Les couleurs sont échantillonnées directement dans le logo Elo Glass :
-| le bleu profond du monogramme, le bleu de marque, le ciel des étincelles et
-| le graphite de la raclette. Rien n'est inventé.
+| Tout vient du logo : le bleu marine et le vert sauge du monogramme, l'ivoire
+| de son fond, la serif à forts contrastes du mot « CLEAN », la linéale
+| géométrique du mot « COMPANY », et ses deux formes — l'ellipse et l'étoile
+| à quatre branches.
 |
-| Le motif structurant du site est le CARREAU : des surfaces blanches cernées
-| d'un filet bleu très clair, à faible rayon, avec un reflet en haut à gauche.
+| L'ellipse donne les boutons (entièrement arrondis) et le dessin du hero ;
+| l'étoile sert de puce et de séparateur. Les surfaces, elles, restent
+| à angles presque droits, séparées par des filets plutôt que par des ombres.
 */
 
 @theme {
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --font-display: 'Archivo', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Jost', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Cormorant Garamond', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
 
-    /* Bleus du logo */
-    --color-nuit-900: #071b41;
-    --color-nuit-800: #0b275e;
-    --color-nuit-700: #0d3878;
-    --color-elo-700: #08447f;
-    --color-elo-600: #0a529c;
-    --color-elo-500: #1268bd;
-    --color-ciel-500: #57a1d0;
-    --color-ciel-300: #9bc9e8;
-    --color-ciel-100: #dbeaf7;
+    /* Marine du monogramme */
+    --color-marine-950: #041a3c;
+    --color-marine-900: #06234f;
+    --color-marine-700: #14386f;
+    --color-marine-500: #3f5c8d;
 
-    /* Graphite de la raclette */
-    --color-graphite-900: #0e141b;
-    --color-graphite-700: #33373d;
-    --color-graphite-500: #5b636e;
-    --color-graphite-400: #7b838f;
+    /* Sauge du monogramme */
+    --color-sauge-700: #43593f;
+    --color-sauge-600: #597455;
+    --color-sauge-400: #8ea78a;
+    --color-sauge-200: #cfdacb;
+    --color-sauge-100: #e8eee5;
 
-    /* Verre */
-    --color-verre-50: #f7fafd;
-    --color-verre-100: #eef4fa;
-    --color-verre-200: #dbe6f2;
-    --color-filet: #d7e4f2;
+    /* Fond du logo et ses déclinaisons */
+    --color-ivoire: #fcfcf9;
+    --color-lin: #f3f4ed;
+    --color-filet: #dfe1d6;
 
-    --radius-pane: 10px;
-    --radius-control: 7px;
+    /* Texte */
+    --color-encre-900: #121b2b;
+    --color-encre-600: #4a5567;
+    --color-encre-400: #7a8394;
 
-    --shadow-pane: 0 1px 2px rgba(11, 39, 94, 0.05), 0 12px 28px -18px rgba(11, 39, 94, 0.35);
-    --shadow-lift: 0 2px 4px rgba(11, 39, 94, 0.06), 0 26px 50px -26px rgba(11, 39, 94, 0.45);
+    --radius-surface: 4px;
+
+    --shadow-carte: 0 1px 0 rgba(6, 35, 79, 0.04), 0 30px 60px -40px rgba(6, 35, 79, 0.45);
+
+    --ease-doux: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/*
-| Échelle typographique fluide — pensée mobile d'abord.
-*/
 @layer base {
     :root {
-        --step-label: 0.6875rem;
-        --step-h1: clamp(2.05rem, 1.35rem + 3.1vw, 3.9rem);
-        --step-h2: clamp(1.6rem, 1.2rem + 1.9vw, 2.7rem);
-        --step-h3: clamp(1.075rem, 1rem + 0.35vw, 1.25rem);
+        --step-h1: clamp(2.35rem, 1.4rem + 4.4vw, 5rem);
+        --step-h2: clamp(2.1rem, 1.5rem + 2.6vw, 3.6rem);
+        --step-h3: clamp(1.45rem, 1.3rem + 0.6vw, 1.8rem);
         --step-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
-        --section-y: clamp(3.5rem, 6.5vw, 7rem);
+        --section-y: clamp(4rem, 8vw, 8.5rem);
     }
 
     html {
@@ -71,19 +69,27 @@
     }
 
     body {
-        background-color: #ffffff;
-        color: var(--color-graphite-900);
+        background-color: var(--color-ivoire);
+        color: var(--color-encre-900);
         font-family: var(--font-sans);
+        line-height: 1.6;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
         /* Laisse la place à la barre d'action fixe du mobile. */
         padding-bottom: env(safe-area-inset-bottom);
     }
 
+    /*
+    | La Cormorant a un œil petit : elle se compose grand, en graisse moyenne,
+    | avec un interlignage serré.
+    */
     h1, h2, h3, h4 {
         font-family: var(--font-display);
-        letter-spacing: -0.02em;
+        font-weight: 500;
+        letter-spacing: -0.012em;
+        line-height: 1.05;
         text-wrap: balance;
+        color: var(--color-marine-900);
     }
 
     p {
@@ -91,13 +97,12 @@
     }
 
     ::selection {
-        background: var(--color-elo-600);
+        background: var(--color-sauge-600);
         color: #fff;
     }
 
-    /* Focus visible et homogène partout. */
     :focus-visible {
-        outline: 2px solid var(--color-elo-600);
+        outline: 2px solid var(--color-sauge-600);
         outline-offset: 3px;
         border-radius: 3px;
     }
@@ -110,176 +115,238 @@
 }
 
 @layer components {
-    /*
-    | L'étiquette lettrée reprend l'espacement du mot « E L O  G L A S S »
-    | du logo. C'est le seul endroit où l'on utilise des capitales.
-    */
-    .eyebrow {
-        font-family: var(--font-display);
-        font-size: var(--step-label);
-        font-weight: 700;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
+    .wrap {
+        margin-inline: auto;
+        max-width: 76rem;
+        padding-inline: 1.25rem;
+    }
+    @media (min-width: 640px) {
+        .wrap {
+            padding-inline: 2rem;
+        }
     }
 
-    /*
-    | Le carreau : surface blanche, filet bleu, reflet discret en haut à gauche.
-    */
-    .pane {
-        position: relative;
-        /* Isole la pile locale : le reflet reste sous le contenu du carreau. */
-        isolation: isolate;
+    .section-y {
+        padding-block: var(--section-y);
+    }
+
+    .lead {
+        font-size: var(--step-lead);
+        line-height: 1.55;
+        color: var(--color-encre-600);
+    }
+
+    /* Surface posée : filet fin, angles presque droits. */
+    .carte {
         background: #fff;
         border: 1px solid var(--color-filet);
-        border-radius: var(--radius-pane);
-    }
-    .pane::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        border-radius: inherit;
-        pointer-events: none;
-        background: linear-gradient(146deg, rgba(219, 234, 247, 0.75) 0%, rgba(219, 234, 247, 0.28) 22%, transparent 46%);
-    }
-    .pane > * {
-        position: relative;
-        z-index: 1;
+        border-radius: var(--radius-surface);
     }
 
-    .pane-tint {
-        background: linear-gradient(168deg, #ffffff 0%, var(--color-verre-50) 100%);
-    }
-
-    /* Bouton principal — angles francs, pas de pilule. */
+    /*
+    | Boutons : la forme reprend l'ellipse du monogramme. Au survol, un reflet
+    | traverse le bouton — le geste d'un chiffon qu'on passe.
+    */
     .btn {
+        position: relative;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
-        border-radius: var(--radius-control);
-        font-weight: 600;
+        gap: 0.55rem;
+        overflow: hidden;
+        border-radius: 999px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
         line-height: 1;
         /* Cible tactile confortable : 48 px minimum. */
         min-height: 3rem;
-        padding: 0 1.25rem;
-        transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+        padding: 0 1.5rem;
+        transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
     }
     .btn:active {
-        transform: translateY(1px);
+        transform: scale(0.98);
+    }
+    .btn::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+        transform: translateX(-120%);
+        pointer-events: none;
+    }
+    .btn:hover::after {
+        transform: translateX(120%);
+        transition: transform 0.7s var(--ease-doux);
     }
 
     .btn-primary {
-        background: var(--color-elo-600);
+        background: var(--color-marine-900);
         color: #fff;
-        box-shadow: 0 10px 24px -14px rgba(10, 82, 156, 0.9);
     }
     .btn-primary:hover {
-        background: var(--color-elo-700);
+        background: var(--color-marine-700);
+    }
+
+    .btn-sauge {
+        background: var(--color-sauge-600);
+        color: #fff;
+    }
+    .btn-sauge:hover {
+        background: var(--color-sauge-700);
     }
 
     .btn-ghost {
-        background: #fff;
-        color: var(--color-nuit-800);
-        border: 1px solid var(--color-filet);
+        background: transparent;
+        color: var(--color-marine-900);
+        border: 1px solid var(--color-marine-900);
     }
     .btn-ghost:hover {
-        border-color: var(--color-ciel-500);
-        background: var(--color-verre-50);
+        background: var(--color-marine-900);
+        color: #fff;
     }
 
-    .btn-dark {
-        background: #fff;
-        color: var(--color-nuit-800);
+    .btn-clair {
+        background: var(--color-ivoire);
+        color: var(--color-marine-900);
     }
-    .btn-dark:hover {
-        background: var(--color-ciel-100);
+    .btn-clair:hover {
+        background: var(--color-sauge-100);
     }
 
     /* Vert officiel WhatsApp : c'est la couleur qui fait reconnaître le bouton. */
     .btn-whatsapp {
         background: #25d366;
         color: #fff;
-        box-shadow: 0 10px 24px -14px rgba(37, 211, 102, 0.9);
     }
     .btn-whatsapp:hover {
         background: #1eb45a;
+    }
+
+    /* Lien souligné dont le trait se retrace au survol. */
+    .lien {
+        background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+        padding-bottom: 2px;
+        transition: background-size 0.35s var(--ease-doux);
+    }
+    .lien:hover {
+        background-size: 0 1px;
+        background-position: 100% 100%;
     }
 
     .field {
         width: 100%;
         min-height: 3rem;
         border: 1px solid var(--color-filet);
-        border-radius: var(--radius-control);
-        background: var(--color-verre-50);
+        border-radius: var(--radius-surface);
+        background: var(--color-ivoire);
         padding: 0.75rem 0.875rem;
-        color: var(--color-graphite-900);
+        color: var(--color-encre-900);
         transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
     }
     .field::placeholder {
-        color: var(--color-graphite-400);
+        color: var(--color-encre-400);
     }
     .field:focus {
         outline: none;
         background: #fff;
-        border-color: var(--color-elo-500);
-        box-shadow: 0 0 0 3px rgba(87, 161, 208, 0.28);
+        border-color: var(--color-sauge-600);
+        box-shadow: 0 0 0 3px rgba(89, 116, 85, 0.2);
     }
     .field-error {
-        border-color: #dc2626;
-        background: #fef2f2;
-    }
-
-    /*
-    | Meneaux : filets verticaux évoquant les montants d'une baie vitrée.
-    | Purement décoratif, très discret, désactivé sous 640 px.
-    */
-    .muntins {
-        background-image: linear-gradient(90deg, var(--color-verre-200) 1px, transparent 1px);
-        background-size: 25% 100%;
-        opacity: 0.55;
-    }
-    @media (max-width: 639px) {
-        .muntins {
-            display: none;
-        }
-    }
-}
-
-@layer utilities {
-    .text-shine {
-        background: linear-gradient(104deg, var(--color-ciel-500) 0%, var(--color-elo-600) 42%, var(--color-nuit-800) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-    }
-
-    .section-y {
-        padding-block: var(--section-y);
+        border-color: #b42318;
+        background: #fef3f2;
     }
 }
 
 /*
-| Apparition au défilement.
+|------------------------------------------------------------------------------
+| Mouvement
+|------------------------------------------------------------------------------
 */
+
+/* Apparition au défilement : réservée aux titres et aux blocs principaux. */
 .reveal {
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(14px);
+    transition: opacity 0.8s var(--ease-doux), transform 0.8s var(--ease-doux);
+    transition-delay: var(--d, 0ms);
 }
 .reveal.is-visible {
     opacity: 1;
     transform: none;
 }
 
+/*
+| Entrée du hero : chaque ligne du titre monte derrière un masque, l'une
+| après l'autre. Une seule séquence orchestrée, au chargement.
+*/
+.ligne {
+    display: block;
+    overflow: hidden;
+    /* Laisse respirer les jambages sous la ligne de base. */
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+}
+.ligne > span {
+    display: block;
+    transform: translateY(105%);
+    animation: monter 1.1s var(--ease-doux) forwards;
+    animation-delay: var(--d, 0ms);
+}
+@keyframes monter {
+    to {
+        transform: none;
+    }
+}
+
+.entree {
+    opacity: 0;
+    animation: entrer 0.9s var(--ease-doux) forwards;
+    animation-delay: var(--d, 0ms);
+}
+@keyframes entrer {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* L'étoile du logo, qui scintille. */
+.scintille {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: scintiller 3.6s ease-in-out infinite;
+    animation-delay: var(--d, 0ms);
+}
+@keyframes scintiller {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.55) rotate(45deg);
+        opacity: 0.45;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
     }
-    .reveal {
+    .reveal,
+    .entree {
         opacity: 1;
         transform: none;
         transition: none;
+        animation: none;
+    }
+    .ligne > span {
+        transform: none;
+        animation: none;
     }
     *, *::before, *::after {
         animation-duration: 0.001ms !important;

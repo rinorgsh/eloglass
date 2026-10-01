@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 @php
     $seo = $seo ?? [];
-    $title = $seo['title'] ?? 'Elo Glass — Lavage de vitres et nettoyage de bureaux à Bruxelles';
-    $description = $seo['description'] ?? 'Lavage de vitres et nettoyage de bureaux pour particuliers et professionnels. Sans traces, à l\'eau osmosée. Devis gratuit sous 24 h.';
+    $title = $seo['title'] ?? 'Clean Company — Nettoyage de maisons, de bureaux et de vitres à Bruxelles';
+    $description = $seo['description'] ?? 'Nettoyage pour particuliers et entreprises : ménage, bureaux, commerces, vitres et après chantier. Devis gratuit sous 24 h.';
     $canonical = $seo['canonical'] ?? url()->current();
     $image = $seo['image'] ?? url('/og-image.jpg');
 @endphp
@@ -10,17 +10,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0a529c">
+    <meta name="theme-color" content="#06234f">
 
     <title inertia>{{ $title }}</title>
-    <meta name="description" content="{{ $description }}">
+    <meta name="description" content="{{ $description }}" inertia="description">
     <link rel="canonical" href="{{ $canonical }}">
 
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="robots" content="{{ $seo['robots'] ?? 'index, follow' }}">
     <meta name="author" content="{{ config('company.legal_name') }}">
 
     {{-- Ciblage géographique --}}
-    <meta name="geo.region" content="BE-WBR">
+    <meta name="geo.region" content="BE-VBR">
     <meta name="geo.placename" content="{{ config('company.address.city') }}">
     <meta name="geo.position" content="{{ config('company.geo.lat') }};{{ config('company.geo.lng') }}">
     <meta name="ICBM" content="{{ config('company.geo.lat') }}, {{ config('company.geo.lng') }}">
@@ -35,7 +35,7 @@
     <meta property="og:image" content="{{ $image }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Elo Glass — lavage de vitres professionnel">
+    <meta property="og:image:alt" content="Clean Company — société de nettoyage">
 
     {{-- Twitter / X --}}
     <meta name="twitter:card" content="summary_large_image">
@@ -55,6 +55,8 @@
         <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endisset
 
+    {{-- Polices auto-hébergées : préchargement + @font-face (sans cet appel, elles ne sont jamais chargées). --}}
+    {{ Vite::fonts() }}
     @vite(['resources/js/app.js'])
     @inertiaHead
 
@@ -64,7 +66,7 @@
         dans le dataLayer, utilisable comme conversion Google Ads.
     --}}
     @if($gtm = config('services.gtm_id'))
-        <script>window.dataLayer=window.dataLayer||[];</script>
+        <script>window.dataLayer=window.dataLayer||[];window.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});</script>
         <script async src="https://www.googletagmanager.com/gtm.js?id={{ $gtm }}"></script>
     @elseif($ga = config('services.ga_id'))
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $ga }}"></script>
@@ -92,7 +94,8 @@
             <p>
                 <strong>{{ config('company.legal_name') }}</strong><br>
                 {{ config('company.address.street') }}, {{ config('company.address.postal_code') }} {{ config('company.address.city') }}, {{ config('company.address.country') }}<br>
-                Téléphone : <a href="tel:{{ config('company.phone.e164') }}">{{ config('company.phone.display') }}</a><br>
+                Téléphone : <a href="tel:{{ config('company.phone.e164') }}">{{ config('company.phone.display') }}</a>
+                — <a href="tel:{{ config('company.phone_secondary.e164') }}">{{ config('company.phone_secondary.display') }}</a><br>
                 E-mail : <a href="mailto:{{ config('company.email') }}">{{ config('company.email') }}</a><br>
                 TVA {{ config('company.vat') }}
             </p>

@@ -152,7 +152,7 @@ onBeforeUnmount(() => {
 
 <template>
     <figure class="m-0">
-        <div class="pane relative overflow-hidden shadow-pane">
+        <div class="relative overflow-hidden rounded-[4px] border border-filet shadow-carte">
             <!--
                 touch-action: pan-y laisse la page défiler verticalement sous le
                 doigt, tout en nous confiant les mouvements horizontaux.
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
                 @pointerup="onPointerUp"
                 @pointercancel="onPointerUp"
             >
-                <!-- La vue derrière la vitre : une skyline, comme les immeubles du logo. -->
+                <!-- La vue derrière la vitre : une ligne de toits, aux couleurs du logo. -->
                 <svg
                     class="pointer-events-none absolute inset-0 size-full"
                     viewBox="0 0 800 500"
@@ -174,21 +174,21 @@ onBeforeUnmount(() => {
                 >
                     <defs>
                         <linearGradient id="gr-sky" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#bfdcf1" />
-                            <stop offset="55%" stop-color="#e2eff9" />
-                            <stop offset="100%" stop-color="#f5fafd" />
+                            <stop offset="0%" stop-color="#d6e3e8" />
+                            <stop offset="55%" stop-color="#ecf1ee" />
+                            <stop offset="100%" stop-color="#fcfcf9" />
                         </linearGradient>
                         <linearGradient id="gr-far" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#9bc9e8" />
-                            <stop offset="100%" stop-color="#c4dcee" />
+                            <stop offset="0%" stop-color="#cfdacb" />
+                            <stop offset="100%" stop-color="#e8eee5" />
                         </linearGradient>
                         <linearGradient id="gr-mid" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#3f7fbb" />
-                            <stop offset="100%" stop-color="#6ea3ce" />
+                            <stop offset="0%" stop-color="#597455" />
+                            <stop offset="100%" stop-color="#8ea78a" />
                         </linearGradient>
                         <linearGradient id="gr-near" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#0b275e" />
-                            <stop offset="100%" stop-color="#164a8e" />
+                            <stop offset="0%" stop-color="#06234f" />
+                            <stop offset="100%" stop-color="#14386f" />
                         </linearGradient>
                     </defs>
 
@@ -258,7 +258,7 @@ onBeforeUnmount(() => {
                     class="pointer-events-none absolute inset-y-0 z-10 w-0"
                     :style="{ left: clean + '%' }"
                 >
-                    <span class="absolute inset-y-0 -left-[3px] w-[6px] rounded-full bg-linear-to-b from-graphite-700 via-graphite-900 to-graphite-700 shadow-[0_0_12px_rgba(11,39,94,0.45)]" aria-hidden="true" />
+                    <span class="absolute inset-y-0 -left-[3px] w-[6px] rounded-full bg-linear-to-b from-marine-700 via-marine-950 to-marine-700 shadow-[0_0_12px_rgba(6,35,79,0.45)]" aria-hidden="true" />
                     <span class="absolute inset-y-0 left-[3px] w-[10px] bg-linear-to-r from-white/85 to-transparent" aria-hidden="true" />
                     <span
                         role="slider"
@@ -269,7 +269,7 @@ onBeforeUnmount(() => {
                         aria-valuemax="100"
                         :aria-valuenow="position"
                         :aria-valuetext="position + ' % nettoyé'"
-                        class="pointer-events-auto absolute top-1/2 left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize touch-none place-items-center rounded-full border-2 border-white bg-graphite-900 text-white shadow-lift transition-transform"
+                        class="pointer-events-auto absolute top-1/2 left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize touch-none place-items-center rounded-full border-2 border-white bg-marine-950 text-white shadow-carte transition-transform"
                         :class="dragging ? 'scale-110' : 'hover:scale-105'"
                         @keydown="onKeydown"
                     >
@@ -278,16 +278,16 @@ onBeforeUnmount(() => {
                 </div>
 
                 <!-- Étiquettes d'état -->
-                <span class="pointer-events-none absolute bottom-3 left-3 z-10 rounded-[5px] bg-white/90 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-nuit-800 uppercase">
+                <span class="pointer-events-none absolute bottom-3 left-3 z-10 rounded-[5px] bg-white/90 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-marine-900 uppercase">
                     Après
                 </span>
-                <span class="pointer-events-none absolute right-3 bottom-3 z-10 rounded-[5px] bg-graphite-900/80 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-white uppercase">
+                <span class="pointer-events-none absolute right-3 bottom-3 z-10 rounded-[5px] bg-marine-950/80 px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide text-white uppercase">
                     Avant
                 </span>
             </div>
         </div>
-        <figcaption class="mt-3 text-center text-sm text-graphite-500">
-            Faites glisser la raclette — c'est le geste, et le résultat.
+        <figcaption class="mt-3 text-center text-sm text-encre-600">
+            Faites glisser la raclette pour nettoyer la vitre.
         </figcaption>
     </figure>
 </template>

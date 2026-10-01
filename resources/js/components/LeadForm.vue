@@ -1,13 +1,14 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
-import { Check, Phone, ArrowRight, Loader2 } from 'lucide-vue-next';
+import { Check, Phone, Loader2 } from 'lucide-vue-next';
 
 const props = defineProps({
     // 'full'     : formulaire de devis complet
     // 'callback' : rappel express, deux champs
     variant: { type: String, default: 'full' },
     services: { type: Array, default: () => [] },
+    families: { type: Object, default: () => ({}) },
     defaultCity: { type: String, default: '' },
     defaultService: { type: String, default: '' },
     // Préfixe des identifiants : permet plusieurs formulaires sur une même page.
@@ -19,7 +20,7 @@ const phone = computed(() => page.props.contactPhone);
 const phoneHref = computed(() => 'tel:' + page.props.contactPhoneE164);
 const responseTime = computed(() => page.props.company.responseTime);
 
-const propertyTypes = ['Maison', 'Appartement', 'Commerce', 'Bureaux', 'Immeuble', 'Autre'];
+const propertyTypes = ['Maison', 'Appartement', 'Bureaux', 'Commerce', 'Immeuble', 'Autre'];
 
 const submitted = ref(false);
 
@@ -35,13 +36,17 @@ const form = useForm({
     website: '',
 });
 
-const endpoint = computed(() => (props.variant === 'callback' ? '/rappel' : '/contact'));
+// Une prestation choisie ailleurs sur la page pré-remplit le sélecteur.
+watch(() => props.defaultService, (value) => {
+    form.service = value;
+    submitted.value = false;
+});
 
-const familyLabels = { vitres: 'Lavage de vitres', bureaux: 'Nettoyage de bureaux' };
+const endpoint = computed(() => (props.variant === 'callback' ? '/rappel' : '/contact'));
 
 const servicesByFamily = computed(() =>
     props.services.reduce((groups, service) => {
-        (groups[service.family ?? 'vitres'] ??= []).push(service);
+        (groups[service.family] ??= []).push(service);
 
         return groups;
     }, {}),
@@ -65,15 +70,15 @@ function submit() {
 <template>
     <div>
         <!-- Confirmation -->
-        <div v-if="submitted" class="flex flex-col items-center px-2 py-10 text-center">
-            <span class="grid size-14 place-items-center rounded-full bg-ciel-100 text-elo-600">
-                <Check class="size-7" aria-hidden="true" />
+        <div v-if="submitted" class="flex flex-col items-center px-2 py-10 text-center" role="status">
+            <span class="confirme grid size-14 place-items-center rounded-full bg-sauge-600 text-white">
+                <Check class="size-7" stroke-width="1.5" aria-hidden="true" />
             </span>
-            <p class="mt-5 font-display text-xl font-bold text-nuit-800">C'est envoyé, merci&nbsp;!</p>
-            <p class="mt-2 max-w-xs text-graphite-500">
-                Nous revenons vers vous sous {{ responseTime }} avec votre prix. Besoin d'une réponse tout de suite&nbsp;?
+            <p class="mt-5 font-display text-3xl text-marine-900">Demande envoyée</p>
+            <p class="mt-2 max-w-xs text-encre-600">
+                Nous vous répondons sous {{ responseTime }} avec votre prix. Pour une réponse immédiate, appelez-nous.
             </p>
-            <a :href="phoneHref" class="btn btn-primary mt-5 w-full sm:w-auto" data-lead-cta="call-after-submit">
+            <a :href="phoneHref" class="btn btn-primary mt-6 w-full sm:w-auto" data-lead-cta="call-after-submit">
                 <Phone class="size-4" aria-hidden="true" />
                 {{ phone }}
             </a>
@@ -87,7 +92,7 @@ function submit() {
 
             <template v-if="variant === 'full'">
                 <fieldset class="mb-5">
-                    <legend class="mb-2.5 block text-sm font-semibold text-graphite-700">C'est pour quel type de bien&nbsp;?</legend>
+                    <legend class="mb-2.5 block text-sm font-medium text-encre-900">Quel type de lieu&nbsp;?</legend>
                     <div class="flex flex-wrap gap-2">
                         <button
                             v-for="type in propertyTypes"
@@ -95,10 +100,10 @@ function submit() {
                             type="button"
                             @click="form.property_type = form.property_type === type ? '' : type"
                             :aria-pressed="form.property_type === type"
-                            class="min-h-11 rounded-[7px] border px-3.5 text-sm font-medium transition"
+                            class="min-h-10 rounded-full border px-4 text-[0.95rem] transition-colors duration-200"
                             :class="form.property_type === type
-                                ? 'border-elo-600 bg-elo-600 text-white'
-                                : 'border-filet bg-verre-50 text-graphite-700 hover:border-ciel-500 hover:bg-white'"
+                                ? 'border-marine-900 bg-marine-900 text-white'
+                                : 'border-filet bg-ivoire text-encre-900 hover:border-sauge-600'"
                         >
                             {{ type }}
                         </button>
@@ -108,8 +113,8 @@ function submit() {
 
             <div class="grid gap-4" :class="variant === 'full' ? 'sm:grid-cols-2' : ''">
                 <div>
-                    <label :for="idPrefix + '-name'" class="mb-1.5 block text-sm font-semibold text-graphite-700">
-                        Votre nom <span class="text-elo-600" aria-hidden="true">*</span>
+                    <label :for="idPrefix + '-name'" class="mb-1.5 block text-sm font-medium text-encre-900">
+                        Votre nom <span class="text-sauge-700" aria-hidden="true">*</span>
                     </label>
                     <input
                         :id="idPrefix + '-name'"
@@ -122,12 +127,12 @@ function submit() {
                         :class="{ 'field-error': form.errors.name }"
                         :aria-invalid="!!form.errors.name"
                     />
-                    <p v-if="form.errors.name" class="mt-1.5 text-sm text-red-600">{{ form.errors.name }}</p>
+                    <p v-if="form.errors.name" class="mt-1.5 text-sm text-[#b42318]">{{ form.errors.name }}</p>
                 </div>
 
                 <div>
-                    <label :for="idPrefix + '-phone'" class="mb-1.5 block text-sm font-semibold text-graphite-700">
-                        Téléphone <span class="text-elo-600" aria-hidden="true">*</span>
+                    <label :for="idPrefix + '-phone'" class="mb-1.5 block text-sm font-medium text-encre-900">
+                        Téléphone <span class="text-sauge-700" aria-hidden="true">*</span>
                     </label>
                     <input
                         :id="idPrefix + '-phone'"
@@ -141,26 +146,26 @@ function submit() {
                         :class="{ 'field-error': form.errors.phone }"
                         :aria-invalid="!!form.errors.phone"
                     />
-                    <p v-if="form.errors.phone" class="mt-1.5 text-sm text-red-600">{{ form.errors.phone }}</p>
+                    <p v-if="form.errors.phone" class="mt-1.5 text-sm text-[#b42318]">{{ form.errors.phone }}</p>
                 </div>
             </div>
 
             <template v-if="variant === 'full'">
                 <div class="mt-4 grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label :for="idPrefix + '-city'" class="mb-1.5 block text-sm font-semibold text-graphite-700">Localité</label>
+                        <label :for="idPrefix + '-city'" class="mb-1.5 block text-sm font-medium text-encre-900">Commune</label>
                         <input
                             :id="idPrefix + '-city'"
                             v-model="form.city"
                             type="text"
                             autocomplete="address-level2"
-                            placeholder="Lasne, Waterloo…"
+                            placeholder="Londerzeel, Uccle…"
                             class="field"
                         />
                     </div>
                     <div>
-                        <label :for="idPrefix + '-email'" class="mb-1.5 block text-sm font-semibold text-graphite-700">
-                            E-mail <span class="font-normal text-graphite-400">(facultatif)</span>
+                        <label :for="idPrefix + '-email'" class="mb-1.5 block text-sm font-medium text-encre-900">
+                            E-mail <span class="font-normal text-encre-400">(facultatif)</span>
                         </label>
                         <input
                             :id="idPrefix + '-email'"
@@ -172,30 +177,30 @@ function submit() {
                             class="field"
                             :class="{ 'field-error': form.errors.email }"
                         />
-                        <p v-if="form.errors.email" class="mt-1.5 text-sm text-red-600">{{ form.errors.email }}</p>
+                        <p v-if="form.errors.email" class="mt-1.5 text-sm text-[#b42318]">{{ form.errors.email }}</p>
                     </div>
                 </div>
 
                 <div v-if="services.length" class="mt-4">
-                    <label :for="idPrefix + '-service'" class="mb-1.5 block text-sm font-semibold text-graphite-700">Prestation</label>
+                    <label :for="idPrefix + '-service'" class="mb-1.5 block text-sm font-medium text-encre-900">Prestation</label>
                     <select :id="idPrefix + '-service'" v-model="form.service" class="field">
                         <option value="">Je ne sais pas encore</option>
-                        <!-- Groupé par métier : le visiteur trouve sa prestation sans lire toute la liste. -->
-                        <optgroup v-for="(list, key) in servicesByFamily" :key="key" :label="familyLabels[key]">
+                        <!-- Groupé par famille : le visiteur trouve sa prestation sans lire toute la liste. -->
+                        <optgroup v-for="(list, key) in servicesByFamily" :key="key" :label="families[key]?.label ?? key">
                             <option v-for="svc in list" :key="svc.slug" :value="svc.title">{{ svc.title }}</option>
                         </optgroup>
                     </select>
                 </div>
 
                 <div class="mt-4">
-                    <label :for="idPrefix + '-message'" class="mb-1.5 block text-sm font-semibold text-graphite-700">
-                        Détails <span class="font-normal text-graphite-400">(facultatif)</span>
+                    <label :for="idPrefix + '-message'" class="mb-1.5 block text-sm font-medium text-encre-900">
+                        Détails <span class="font-normal text-encre-400">(facultatif)</span>
                     </label>
                     <textarea
                         :id="idPrefix + '-message'"
                         v-model="form.message"
                         rows="3"
-                        placeholder="Nombre de fenêtres, étage, véranda, accès au jardin…"
+                        placeholder="Surface, nombre de pièces, fréquence souhaitée…"
                         class="field resize-y"
                     />
                 </div>
@@ -208,13 +213,24 @@ function submit() {
                 data-lead-cta="submit"
             >
                 <Loader2 v-if="form.processing" class="size-4 animate-spin" aria-hidden="true" />
-                {{ form.processing ? 'Envoi…' : (variant === 'callback' ? 'Rappelez-moi' : 'Recevoir mon prix') }}
-                <ArrowRight v-if="!form.processing" class="size-4" aria-hidden="true" />
+                {{ form.processing ? 'Envoi…' : (variant === 'callback' ? 'Me faire rappeler' : 'Recevoir mon prix') }}
             </button>
 
-            <p class="mt-3 text-center text-sm text-graphite-500">
-                Réponse sous {{ responseTime }} · Gratuit et sans engagement
+            <p class="mt-3 text-center text-sm text-encre-600">
+                Réponse sous {{ responseTime }}, gratuit et sans engagement.
             </p>
         </form>
     </div>
 </template>
+
+<style scoped>
+.confirme {
+    animation: confirmer 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes confirmer {
+    from {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+}
+</style>

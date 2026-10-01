@@ -1,23 +1,25 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
-import { Phone, Menu, X, MapPin, Mail, Clock, ArrowRight } from 'lucide-vue-next';
-import EloLogo from '../components/EloLogo.vue';
+import { Phone, Menu, X, MapPin, Mail, Clock } from 'lucide-vue-next';
+import BrandLogo from '../components/BrandLogo.vue';
 import WhatsAppIcon from '../components/WhatsAppIcon.vue';
 
 const page = usePage();
 const company = computed(() => page.props.company);
 const phone = computed(() => page.props.contactPhone);
 const phoneHref = computed(() => 'tel:' + page.props.contactPhoneE164);
+const phone2 = computed(() => page.props.contactPhone2);
+const phone2Href = computed(() => 'tel:' + page.props.contactPhone2E164);
 const email = computed(() => page.props.contactEmail);
 const whatsappHref = computed(
-    () => 'https://wa.me/' + page.props.whatsapp + '?text=' + encodeURIComponent('Bonjour, je souhaite un devis pour le nettoyage de mes vitres.'),
+    () => 'https://wa.me/' + page.props.whatsapp + '?text=' + encodeURIComponent('Bonjour, je souhaite un devis de nettoyage.'),
 );
 
 const sections = [
     { id: 'prestations', label: 'Prestations' },
     { id: 'methode', label: 'Méthode' },
-    { id: 'zones', label: 'Zones' },
+    { id: 'communes', label: 'Communes' },
     { id: 'questions', label: 'Questions' },
 ];
 
@@ -48,124 +50,121 @@ onBeforeUnmount(() => {
     stopNavigateListener();
 });
 
-function goToSection(id) {
+/*
+| Les entrées du menu sont de vrais liens (/#section) : lisibles par les
+| robots et utilisables sans JavaScript. Quand la section existe sur la
+| page courante, on se contente d'y défiler.
+*/
+function goToSection(event, id) {
     menuOpen.value = false;
 
     const target = document.getElementById(id);
 
     if (target) {
+        event.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        return;
     }
-
-    router.visit('/#' + id);
 }
 </script>
 
 <template>
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen">
         <a
             href="#contenu"
-            class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:rounded-[7px] focus:bg-nuit-800 focus:px-4 focus:py-2.5 focus:text-white"
+            class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-marine-900 focus:px-4 focus:py-2.5 focus:text-white"
         >
             Aller au contenu
         </a>
 
         <!-- ══════════════════ EN-TÊTE ══════════════════ -->
         <header
-            class="fixed inset-x-0 top-0 z-50 transition-colors duration-200"
-            :class="scrolled ? 'border-b border-filet bg-white/90 backdrop-blur-md' : 'border-b border-transparent'"
+            class="fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-300"
+            :class="scrolled ? 'border-filet bg-ivoire/90 backdrop-blur-md' : 'border-transparent'"
         >
-            <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
-                <Link href="/" class="shrink-0" aria-label="Elo Glass — accueil">
-                    <EloLogo compact />
+            <div class="wrap flex items-center justify-between gap-4 py-3">
+                <Link href="/" class="shrink-0" aria-label="Clean Company, accueil">
+                    <BrandLogo compact />
                 </Link>
 
-                <nav class="hidden items-center gap-7 lg:flex" aria-label="Navigation principale">
-                    <button
+                <nav class="hidden items-center gap-8 lg:flex" aria-label="Navigation principale">
+                    <a
                         v-for="section in sections"
                         :key="section.id"
-                        type="button"
-                        @click="goToSection(section.id)"
-                        class="text-sm font-medium text-graphite-700 transition hover:text-elo-600"
+                        :href="'/#' + section.id"
+                        class="nav-lien text-[0.95rem] text-encre-900"
+                        @click="goToSection($event, section.id)"
                     >
                         {{ section.label }}
-                    </button>
+                    </a>
                 </nav>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <a
                         :href="phoneHref"
-                        class="hidden items-center gap-2 text-sm font-semibold text-nuit-800 transition hover:text-elo-600 md:inline-flex"
+                        class="hidden items-center gap-2 text-[0.95rem] font-medium text-marine-900 transition-colors hover:text-sauge-700 md:inline-flex"
                         data-lead-cta="header-call"
                     >
-                        <Phone class="size-4 text-elo-600" aria-hidden="true" />
+                        <Phone class="size-4 text-sauge-600" stroke-width="1.5" aria-hidden="true" />
                         {{ phone }}
+                    </a>
+                    <a
+                        href="/#devis"
+                        class="btn btn-primary hidden min-h-11 text-[0.95rem] md:inline-flex"
+                        data-lead-cta="header-quote"
+                        @click="goToSection($event, 'devis')"
+                    >
+                        Demander un devis
                     </a>
                     <button
                         type="button"
-                        @click="goToSection('devis')"
-                        class="btn btn-primary hidden text-sm md:inline-flex"
-                        data-lead-cta="header-quote"
-                    >
-                        Devis gratuit
-                    </button>
-                    <button
-                        type="button"
                         @click="menuOpen = true"
-                        class="grid size-11 place-items-center rounded-[7px] border border-filet bg-white text-nuit-800 lg:hidden"
+                        class="grid size-11 place-items-center rounded-full border border-filet bg-ivoire text-marine-900 lg:hidden"
                         aria-label="Ouvrir le menu"
                         :aria-expanded="menuOpen"
                     >
-                        <Menu class="size-5" aria-hidden="true" />
+                        <Menu class="size-5" stroke-width="1.5" aria-hidden="true" />
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- ══════════════════ MENU MOBILE ══════════════════ -->
-        <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="opacity-0"
-            leave-active-class="transition duration-150 ease-in"
-            leave-to-class="opacity-0"
-        >
-            <div v-if="menuOpen" class="fixed inset-0 z-[60] bg-white lg:hidden">
+        <Transition name="menu">
+            <div v-if="menuOpen" class="fixed inset-0 z-[60] bg-ivoire lg:hidden">
                 <div class="flex h-full flex-col overflow-y-auto">
-                    <div class="flex items-center justify-between border-b border-filet px-4 py-2.5 sm:px-6">
-                        <EloLogo compact />
+                    <div class="wrap flex w-full items-center justify-between py-3">
+                        <BrandLogo compact />
                         <button
                             type="button"
                             @click="menuOpen = false"
-                            class="grid size-11 place-items-center rounded-[7px] border border-filet text-nuit-800"
+                            class="grid size-11 place-items-center rounded-full border border-filet text-marine-900"
                             aria-label="Fermer le menu"
                         >
-                            <X class="size-5" aria-hidden="true" />
+                            <X class="size-5" stroke-width="1.5" aria-hidden="true" />
                         </button>
                     </div>
 
-                    <nav class="flex-1 px-4 py-3 sm:px-6" aria-label="Navigation mobile">
-                        <button
-                            v-for="section in sections"
+                    <nav class="wrap w-full flex-1 pt-6" aria-label="Navigation mobile">
+                        <a
+                            v-for="(section, i) in sections"
                             :key="section.id"
-                            type="button"
-                            @click="goToSection(section.id)"
-                            class="flex w-full items-center justify-between border-b border-filet py-4 text-left font-display text-xl font-semibold text-nuit-800"
+                            :href="'/#' + section.id"
+                            class="menu-entree block border-b border-filet py-4 font-display text-4xl text-marine-900"
+                            :style="{ '--i': i }"
+                            @click="goToSection($event, section.id)"
                         >
                             {{ section.label }}
-                            <ArrowRight class="size-5 text-ciel-500" aria-hidden="true" />
-                        </button>
+                        </a>
                         <Link
-                            href="/lavage-de-vitres"
-                            class="flex w-full items-center justify-between border-b border-filet py-4 text-left font-display text-xl font-semibold text-nuit-800"
+                            href="/nettoyage"
+                            class="menu-entree block border-b border-filet py-4 font-display text-4xl text-marine-900"
+                            :style="{ '--i': sections.length }"
                         >
-                            Toutes nos communes
-                            <ArrowRight class="size-5 text-ciel-500" aria-hidden="true" />
+                            Toutes les communes
                         </Link>
                     </nav>
 
-                    <div class="border-t border-filet bg-verre-50 px-4 py-5 sm:px-6">
+                    <div class="wrap w-full border-t border-filet bg-lin py-6">
                         <a :href="phoneHref" class="btn btn-primary w-full text-base" data-lead-cta="menu-call">
                             <Phone class="size-4" aria-hidden="true" />
                             {{ phone }}
@@ -180,13 +179,9 @@ function goToSection(id) {
                             <WhatsAppIcon class="size-5" />
                             Écrire sur WhatsApp
                         </a>
-                        <a :href="'mailto:' + email" class="mt-3 flex items-center gap-2 text-sm text-graphite-500">
-                            <Mail class="size-4 text-elo-600" aria-hidden="true" /> {{ email }}
+                        <a :href="'mailto:' + email" class="mt-4 flex items-center gap-2 text-sm text-encre-600">
+                            <Mail class="size-4 text-sauge-600" stroke-width="1.5" aria-hidden="true" /> {{ email }}
                         </a>
-                        <p class="mt-2 flex items-center gap-2 text-sm text-graphite-500">
-                            <MapPin class="size-4 text-elo-600" aria-hidden="true" />
-                            {{ company.address.street }}, {{ company.address.postal_code }} {{ company.address.city }}
-                        </p>
                     </div>
                 </div>
             </div>
@@ -197,35 +192,37 @@ function goToSection(id) {
         </main>
 
         <!-- ══════════════════ PIED DE PAGE ══════════════════ -->
-        <footer class="bg-nuit-900 text-white">
-            <div class="mx-auto max-w-6xl px-4 pt-14 pb-8 sm:px-6 lg:px-8">
-                <div class="grid gap-10 border-b border-white/10 pb-10 md:grid-cols-12">
+        <footer class="bg-marine-950 text-white">
+            <div class="wrap pt-16 pb-8">
+                <div class="grid gap-12 border-b border-white/10 pb-12 md:grid-cols-12">
                     <div class="md:col-span-5">
-                        <EloLogo theme="dark" />
-                        <p class="mt-5 max-w-sm leading-relaxed text-ciel-100/75">
-                            Lavage de vitres et nettoyage de bureaux pour les particuliers et les entreprises
-                            de Bruxelles et de sa périphérie. Sans traces, à l'eau osmosée.
+                        <BrandLogo theme="dark" />
+                        <p class="mt-6 max-w-sm leading-relaxed text-white/70">
+                            Nettoyage de maisons, de bureaux, de commerces et de vitres, à Bruxelles et en périphérie.
                         </p>
 
-                        <address class="mt-6 space-y-2.5 text-sm not-italic">
-                            <a :href="phoneHref" class="flex items-center gap-2.5 text-white transition hover:text-ciel-300" data-lead-cta="footer-call">
-                                <Phone class="size-4 shrink-0 text-ciel-500" aria-hidden="true" />
-                                <span class="font-semibold">{{ phone }}</span>
-                            </a>
-                            <a :href="'mailto:' + email" class="flex items-center gap-2.5 text-ciel-100/80 transition hover:text-white">
-                                <Mail class="size-4 shrink-0 text-ciel-500" aria-hidden="true" />
-                                {{ email }}
-                            </a>
-                            <p class="flex items-start gap-2.5 text-ciel-100/80">
-                                <MapPin class="mt-0.5 size-4 shrink-0 text-ciel-500" aria-hidden="true" />
+                        <address class="mt-7 space-y-3 text-[0.95rem] not-italic">
+                            <p class="flex items-center gap-3">
+                                <Phone class="size-4 shrink-0 text-sauge-400" stroke-width="1.5" aria-hidden="true" />
                                 <span>
-                                    {{ company.legalName }}<br />
+                                    <a :href="phoneHref" class="lien font-medium text-white" data-lead-cta="footer-call">{{ phone }}</a>
+                                    <span class="px-2 text-white/30" aria-hidden="true">/</span>
+                                    <a :href="phone2Href" class="lien font-medium text-white" data-lead-cta="footer-call-2">{{ phone2 }}</a>
+                                </span>
+                            </p>
+                            <p class="flex items-center gap-3">
+                                <Mail class="size-4 shrink-0 text-sauge-400" stroke-width="1.5" aria-hidden="true" />
+                                <a :href="'mailto:' + email" class="lien text-white/80">{{ email }}</a>
+                            </p>
+                            <p class="flex items-start gap-3 text-white/80">
+                                <MapPin class="mt-1 size-4 shrink-0 text-sauge-400" stroke-width="1.5" aria-hidden="true" />
+                                <span>
                                     {{ company.address.street }}<br />
                                     {{ company.address.postal_code }} {{ company.address.city }}, {{ company.address.country }}
                                 </span>
                             </p>
-                            <p class="flex items-start gap-2.5 text-ciel-100/80">
-                                <Clock class="mt-0.5 size-4 shrink-0 text-ciel-500" aria-hidden="true" />
+                            <p class="flex items-start gap-3 text-white/80">
+                                <Clock class="mt-1 size-4 shrink-0 text-sauge-400" stroke-width="1.5" aria-hidden="true" />
                                 <span>
                                     <span v-for="slot in company.hours" :key="slot.label" class="block">
                                         {{ slot.label }} : {{ slot.opens }} – {{ slot.closes }}
@@ -236,30 +233,28 @@ function goToSection(id) {
                     </div>
 
                     <div class="md:col-span-4">
-                        <p class="eyebrow text-ciel-500">Communes</p>
-                        <ul class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
+                        <h2 class="font-display text-2xl text-white">Communes</h2>
+                        <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5">
                             <li v-for="zone in page.props.footerZones ?? []" :key="zone.slug">
-                                <Link :href="'/lavage-de-vitres/' + zone.slug" class="text-sm text-ciel-100/80 transition hover:text-white">
+                                <Link :href="'/nettoyage/' + zone.slug" class="text-[0.95rem] text-white/70 transition-colors hover:text-white">
                                     {{ zone.city }}
                                 </Link>
                             </li>
                         </ul>
-                        <Link href="/lavage-de-vitres" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-ciel-300 hover:text-white">
-                            Toutes les zones
-                            <ArrowRight class="size-3.5" aria-hidden="true" />
+                        <Link href="/nettoyage" class="lien mt-5 inline-block text-[0.95rem] font-medium text-sauge-200">
+                            Toutes les communes
                         </Link>
                     </div>
 
                     <div class="md:col-span-3">
-                        <p class="eyebrow text-ciel-500">Entreprise</p>
-                        <ul class="mt-4 space-y-2.5 text-sm text-ciel-100/80">
+                        <h2 class="font-display text-2xl text-white">Entreprise</h2>
+                        <ul class="mt-5 space-y-2.5 text-[0.95rem] text-white/70">
                             <li>TVA {{ company.vat }}</li>
-                            <li>BCE {{ company.bce }}</li>
                             <li>
-                                <Link href="/mentions-legales" class="transition hover:text-white">Mentions légales</Link>
+                                <Link href="/mentions-legales" class="transition-colors hover:text-white">Mentions légales</Link>
                             </li>
                             <li>
-                                <a :href="whatsappHref" target="_blank" rel="noopener" class="inline-flex items-center gap-2 transition hover:text-white">
+                                <a :href="whatsappHref" target="_blank" rel="noopener" class="inline-flex items-center gap-2 transition-colors hover:text-white">
                                     <WhatsAppIcon class="size-4 text-[#25d366]" />
                                     WhatsApp
                                 </a>
@@ -268,8 +263,8 @@ function goToSection(id) {
                     </div>
                 </div>
 
-                <p class="pt-6 text-center text-xs text-ciel-100/50 sm:text-left">
-                    © {{ new Date().getFullYear() }} {{ company.legalName }} — Lavage de vitres et nettoyage de bureaux à Bruxelles et en périphérie.
+                <p class="pt-6 text-center text-sm text-white/50 sm:text-left">
+                    © {{ new Date().getFullYear() }} {{ company.legalName }}. Société de nettoyage à Bruxelles et en périphérie.
                 </p>
             </div>
 
@@ -279,7 +274,7 @@ function goToSection(id) {
 
         <!-- ══════════════════ BARRE D'ACTION MOBILE ══════════════════ -->
         <div
-            class="fixed inset-x-0 bottom-0 z-40 border-t border-filet bg-white/95 backdrop-blur-md lg:hidden"
+            class="fixed inset-x-0 bottom-0 z-40 border-t border-filet bg-ivoire/95 backdrop-blur-md lg:hidden"
             style="padding-bottom: env(safe-area-inset-bottom)"
         >
             <div class="flex items-stretch gap-2 px-3 py-2.5">
@@ -297,15 +292,49 @@ function goToSection(id) {
                 >
                     <WhatsAppIcon class="size-6" />
                 </a>
-                <button
-                    type="button"
-                    @click="goToSection('devis')"
+                <a
+                    href="/#devis"
                     class="btn btn-ghost flex-1 text-[0.95rem]"
                     data-lead-cta="sticky-quote"
+                    @click="goToSection($event, 'devis')"
                 >
                     Devis gratuit
-                </button>
+                </a>
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+/* Lien de navigation : le trait se trace sous le mot au survol. */
+.nav-lien {
+    background: linear-gradient(var(--color-sauge-600), var(--color-sauge-600)) 0 100% / 0 1px no-repeat;
+    padding-block: 0.35rem;
+    transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-lien:hover {
+    background-size: 100% 1px;
+}
+
+/* Menu mobile : le voile s'ouvre, puis les entrées arrivent une à une. */
+.menu-enter-active {
+    transition: opacity 0.25s ease;
+}
+.menu-leave-active {
+    transition: opacity 0.18s ease;
+}
+.menu-enter-from,
+.menu-leave-to {
+    opacity: 0;
+}
+.menu-enter-active .menu-entree {
+    animation: glisser 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 60ms + 80ms);
+}
+@keyframes glisser {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+}
+</style>

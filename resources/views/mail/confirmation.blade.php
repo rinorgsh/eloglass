@@ -1,7 +1,7 @@
 <x-mail::message>
 # Merci {{ $name }} !
 
-Nous avons bien reçu votre demande de devis pour le nettoyage de vos vitres.
+Nous avons bien reçu votre demande de devis.
 
 Un membre de l'équipe **{{ config('app.name') }}** revient vers vous sous **{{ config('company.response_time') }} ouvrables** avec un prix clair et sans engagement.
 

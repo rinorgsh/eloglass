@@ -1,11 +1,12 @@
-# Elo Glass — site vitrine
+# Clean Company — site vitrine
 
-Site de génération de demandes de devis pour **ELO GLASS SRL**, entreprise de **lavage de vitres
-et de nettoyage de bureaux** établie Route de l'Etat 11, 1380 Lasne (BCE 0475.199.436).
+Site de génération de demandes de devis pour **Clean Company**, société de **nettoyage**
+(maisons, bureaux, commerces, vitres, après chantier) établie Watermolenstraat 16,
+1840 Londerzeel (TVA BE 1043.205.603). Le site remplace l'ancien site Elo Glass.
 
 Zone couverte : les **19 communes de la Région de Bruxelles-Capitale** et la **périphérie**
-(Rhode-Saint-Genèse, Kraainem, Wezembeek-Oppem, Tervuren, Overijse, Hoeilaart, Zaventem,
-Dilbeek, Grimbergen, La Hulpe, Lasne, Waterloo) — soit 31 pages locales.
+(Londerzeel, Grimbergen, Dilbeek, Zaventem, Kraainem, Wezembeek-Oppem, Tervuren, Overijse,
+Hoeilaart, Rhode-Saint-Genèse, La Hulpe, Lasne, Waterloo) — soit 32 pages locales.
 
 Laravel 12 · Inertia · Vue 3 · Tailwind CSS 4.
 
@@ -24,14 +25,14 @@ php artisan serve
 | Ce que vous voulez changer | Fichier |
 | --- | --- |
 | Téléphone, adresse, TVA, horaires, réseaux sociaux | `config/company.php` |
-| Prestations (deux familles : `vitres` et `bureaux`), communes desservies, FAQ | `config/site.php` |
+| Prestations (trois familles : `maison`, `entreprise`, `ponctuel`), communes desservies, FAQ | `config/site.php` |
 | Textes de la page d'accueil | `resources/js/Pages/Landing.vue` |
 | Textes des pages communes | `resources/js/Pages/Zone.vue` + le champ `intro` de chaque zone |
 | Palette, typographie, composants visuels | `resources/css/app.css` |
 
 Ajouter une commune dans `config/site.php` crée automatiquement sa page
-`/lavage-de-vitres/{slug}`, son entrée de sitemap, ses liens internes et son balisage
-schema.org. Le champ `intro` doit rester **unique** d'une commune à l'autre : deux textes
+`/nettoyage/{slug}`, son entrée de sitemap, ses liens internes et son balisage
+schema.org. Les anciennes adresses `/lavage-de-vitres/…` redirigent en 301. Le champ `intro` doit rester **unique** d'une commune à l'autre : deux textes
 identiques seraient traités par Google comme du contenu dupliqué.
 
 ## Référencement
@@ -59,7 +60,7 @@ Les deux sont protégés par un honeypot et limités à 8 envois par minute et p
 ## Variables d'environnement utiles
 
 ```
-APP_URL=https://eloglass.be     # sert de base aux canonical, sitemap et JSON-LD
+APP_URL=https://eloglass.be     # sert de base aux canonical, sitemap et JSON-LD — à changer si le domaine change
 MAIL_CONTACT_TO=info@eloglass.be
 COMPANY_WHATSAPP=32484152073
 GTM_ID=                          # ou GA_ID pour GA4 — laisser vide pour désactiver

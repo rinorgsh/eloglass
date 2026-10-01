@@ -55,16 +55,36 @@ class HandleInertiaRequests extends Middleware
             'contactEmail' => $company['email'],
             'contactPhone' => $company['phone']['display'],
             'contactPhoneE164' => $company['phone']['e164'],
+            'contactPhone2' => $company['phone_secondary']['display'],
+            'contactPhone2E164' => $company['phone_secondary']['e164'],
             'whatsapp' => $company['whatsapp'],
             // Maillage interne : un extrait des communes dans le pied de page,
             // la liste complète vivant sur /lavage-de-vitres.
             'footerZones' => array_map(
                 fn ($zone) => ['slug' => $zone['slug'], 'city' => $zone['city']],
-                array_slice(config('site.zones'), 0, 12),
+                $this->footerZones(),
             ),
             'flash' => [
                 'contactSuccess' => fn () => $request->session()->get('contactSuccess'),
             ],
         ];
+    }
+
+    /**
+     * Une commune sur deux ou trois, réparties sur toute la liste : les pages
+     * de fin de liste reçoivent ainsi autant de liens que les premières.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function footerZones(): array
+    {
+        $zones = config('site.zones');
+        $step = max(1, intdiv(count($zones), 12));
+
+        return array_slice(array_values(array_filter(
+            $zones,
+            fn ($index) => $index % $step === 0,
+            ARRAY_FILTER_USE_KEY,
+        )), 0, 12);
     }
 }

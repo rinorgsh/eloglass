@@ -9,10 +9,17 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 
 /*
 | Pages locales — le levier principal du référencement local.
-| /lavage-de-vitres/{commune}
+| /nettoyage/{commune}
 */
-Route::get('/lavage-de-vitres', [PageController::class, 'zones'])->name('zones');
-Route::get('/lavage-de-vitres/{slug}', [PageController::class, 'zone'])->name('zone');
+Route::get('/nettoyage', [PageController::class, 'zones'])->name('zones');
+Route::get('/nettoyage/{slug}', [PageController::class, 'zone'])->name('zone');
+
+/*
+| Anciennes adresses (site Elo Glass) : redirigées définitivement pour ne
+| perdre ni les liens existants ni ce que Google a déjà indexé.
+*/
+Route::permanentRedirect('/lavage-de-vitres', '/nettoyage');
+Route::permanentRedirect('/lavage-de-vitres/{slug}', '/nettoyage/{slug}');
 
 Route::get('/mentions-legales', [PageController::class, 'legal'])->name('legal');
 

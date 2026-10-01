@@ -2,17 +2,17 @@
 import { computed } from 'vue';
 import {
     Home,
-    Store,
-    Building2,
-    Frame,
-    SunMedium,
-    HardHat,
-    Briefcase,
-    SprayCan,
-    Footprints,
-    Building,
-    PackageOpen,
     Sparkles,
+    Frame,
+    KeyRound,
+    Briefcase,
+    Store,
+    Building,
+    SprayCan,
+    HardHat,
+    Footprints,
+    Building2,
+    SunMedium,
 } from 'lucide-vue-next';
 
 /*
@@ -20,19 +20,21 @@ import {
 | la totalité de la bibliothèque d'icônes dans le bundle (~600 ko).
 */
 const map = {
-    // Lavage de vitres
+    // À la maison
     Home,
-    Store,
-    Building2,
+    Sparkles,
     Frame,
-    SunMedium,
-    HardHat,
-    // Nettoyage de bureaux
+    KeyRound,
+    // En entreprise
     Briefcase,
-    SprayCan,
-    Footprints,
+    Store,
     Building,
-    PackageOpen,
+    SprayCan,
+    // Travaux ponctuels
+    HardHat,
+    Footprints,
+    Building2,
+    SunMedium,
 };
 
 const props = defineProps({

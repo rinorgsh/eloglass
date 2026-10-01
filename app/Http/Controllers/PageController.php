@@ -12,8 +12,8 @@ class PageController extends Controller
     public function home(): Response
     {
         $meta = Seo::meta(
-            title: 'Lavage de vitres et nettoyage de bureaux à Bruxelles | Elo Glass',
-            description: 'Elo Glass lave vos vitres sans traces et entretient vos bureaux : vitrines, plateaux, sanitaires, sols et parties communes. Les 19 communes de Bruxelles et toute la périphérie. Devis gratuit sous 24 h — 0484 15 20 73.',
+            title: 'Nettoyage de maisons, de bureaux et de vitres à Bruxelles | Clean Company',
+            description: 'Clean Company nettoie les maisons, les bureaux, les commerces et les vitres à Bruxelles et en périphérie. Ménage régulier, grand nettoyage, après chantier. Devis gratuit sous 24 h : 0484 15 20 73.',
             path: '/',
         );
 
@@ -36,15 +36,15 @@ class PageController extends Controller
 
         abort_if($zone === null, 404);
 
-        $path = '/lavage-de-vitres/'.$zone['slug'];
+        $path = '/nettoyage/'.$zone['slug'];
 
         $meta = Seo::meta(
-            title: 'Lavage de vitres et nettoyage de bureaux à '.$zone['city'].' ('.$zone['postal'].') | Elo Glass',
-            description: 'Laveur de vitres et société de nettoyage à '.$zone['city'].' : maisons, vitrines, vérandas, bureaux et parties communes. Sans traces, à l\'eau osmosée. Devis gratuit sous 24 h — 0484 15 20 73.',
+            title: 'Nettoyage à '.$zone['city'].' ('.$zone['postal'].') : maisons, bureaux, vitres | Clean Company',
+            description: 'Société de nettoyage à '.$zone['city'].' : ménage, grand nettoyage, bureaux, commerces, parties communes et vitres. Devis gratuit sous 24 h : 0484 15 20 73.',
             path: $path,
             breadcrumbs: [
                 ['name' => 'Accueil', 'url' => '/'],
-                ['name' => 'Zones d\'intervention', 'url' => '/lavage-de-vitres'],
+                ['name' => 'Communes desservies', 'url' => '/nettoyage'],
                 ['name' => $zone['city'], 'url' => $path],
             ],
         );
@@ -52,14 +52,17 @@ class PageController extends Controller
         $faq = $this->localFaq($zone);
 
         $this->shareSeo($meta, [
-            Seo::localServiceNode($zone, $meta['canonical']),
             Seo::localServiceNode(
                 $zone,
                 $meta['canonical'],
-                serviceType: 'Nettoyage de bureaux',
-                anchor: 'service-bureaux',
-                description: 'Entretien de bureaux, commerces et parties communes à '.$zone['city']
-                    .' : plateaux et postes de travail, sanitaires et cuisines, sols et moquettes, halls et cages d\'escalier.',
+                description: 'Nettoyage de maisons, de bureaux, de commerces et de parties communes à '.$zone['city']
+                    .' : ménage régulier, grand nettoyage, sanitaires, sols et nettoyage après chantier.',
+            ),
+            Seo::localServiceNode(
+                $zone,
+                $meta['canonical'],
+                serviceType: 'Lavage de vitres',
+                anchor: 'service-vitres',
             ),
             Seo::faqNode($faq, $meta['canonical']),
         ]);
@@ -68,6 +71,7 @@ class PageController extends Controller
             'seo' => $meta,
             'zone' => $zone,
             'services' => config('site.services'),
+            'families' => config('site.families'),
             'faq' => $faq,
             'zones' => $this->zoneLinks($zone),
         ]);
@@ -76,12 +80,12 @@ class PageController extends Controller
     public function zones(): Response
     {
         $meta = Seo::meta(
-            title: "Zones d'intervention — vitres et nettoyage de bureaux à Bruxelles | Elo Glass",
-            description: "Elo Glass intervient dans les 19 communes bruxelloises — Uccle, Ixelles, Woluwe, Schaerbeek, Etterbeek… — et en périphérie : Rhode-Saint-Genèse, Kraainem, Tervuren, Overijse, Zaventem, Dilbeek. Lavage de vitres et nettoyage de bureaux. Devis gratuit sous 24 h.",
-            path: '/lavage-de-vitres',
+            title: 'Communes desservies : nettoyage à Bruxelles et en périphérie | Clean Company',
+            description: 'Clean Company intervient dans les 19 communes bruxelloises et en périphérie : Londerzeel, Grimbergen, Dilbeek, Zaventem, Tervuren, Overijse, Waterloo. Maisons, bureaux, commerces et vitres. Devis gratuit sous 24 h.',
+            path: '/nettoyage',
             breadcrumbs: [
                 ['name' => 'Accueil', 'url' => '/'],
-                ['name' => "Zones d'intervention", 'url' => '/lavage-de-vitres'],
+                ['name' => 'Communes desservies', 'url' => '/nettoyage'],
             ],
         );
 
@@ -96,13 +100,14 @@ class PageController extends Controller
     public function legal(): Response
     {
         $meta = Seo::meta(
-            title: 'Mentions légales | Elo Glass',
-            description: 'Mentions légales et informations d\'entreprise d\'Elo Glass SRL, société de lavage de vitres et de nettoyage établie à Lasne (BCE 0475.199.436).',
+            title: 'Mentions légales | Clean Company',
+            description: 'Mentions légales et informations d\'entreprise de Clean Company, société de nettoyage établie à Londerzeel (BCE 1043.205.603).',
             path: '/mentions-legales',
             breadcrumbs: [
                 ['name' => 'Accueil', 'url' => '/'],
                 ['name' => 'Mentions légales', 'url' => '/mentions-legales'],
             ],
+            index: false,
         );
 
         $this->shareSeo($meta);
@@ -153,7 +158,7 @@ class PageController extends Controller
             ],
             [
                 'q' => 'Sous quel délai pouvez-vous intervenir à '.$city.' ?',
-                'a' => 'Nous répondons à votre demande sous 24 h ouvrables et proposons généralement un créneau dans la semaine. Pour une vitrine ou un nettoyage après chantier urgent à '.$city.', appelez-nous directement au '.config('company.phone.display').'.',
+                'a' => 'Nous répondons à votre demande sous 24 h ouvrables et proposons généralement un créneau dans la semaine. Pour un nettoyage urgent à '.$city.', appelez-nous directement au '.config('company.phone.display').'.',
             ],
         ];
 

@@ -21,11 +21,11 @@ class SeoTest extends TestCase
     public function test_every_zone_page_answers_and_is_indexable(): void
     {
         foreach (config('site.zones') as $zone) {
-            $response = $this->get('/lavage-de-vitres/'.$zone['slug']);
+            $response = $this->get('/nettoyage/'.$zone['slug']);
 
             $response->assertOk();
-            $response->assertSee('Lavage de vitres à '.e($zone['city']), false);
-            $response->assertSee('https://eloglass.be/lavage-de-vitres/'.$zone['slug'], false);
+            $response->assertSee('Nettoyage à '.e($zone['city']), false);
+            $response->assertSee('https://eloglass.be/nettoyage/'.$zone['slug'], false);
         }
     }
 
@@ -46,7 +46,7 @@ class SeoTest extends TestCase
 
     public function test_unknown_zone_returns_404(): void
     {
-        $this->get('/lavage-de-vitres/marrakech')->assertNotFound();
+        $this->get('/nettoyage/marrakech')->assertNotFound();
     }
 
     public function test_structured_data_describes_the_local_business(): void
@@ -60,8 +60,8 @@ class SeoTest extends TestCase
         $this->assertContains('FAQPage', $types);
 
         $business = $graph['@graph'][0];
-        $this->assertSame('BE0475199436', $business['vatID']);
-        $this->assertSame('1380', $business['address']['postalCode']);
+        $this->assertSame('BE1043205603', $business['vatID']);
+        $this->assertSame('1840', $business['address']['postalCode']);
         $this->assertSame('+32 484 15 20 73', $business['telephone']);
     }
 
@@ -73,8 +73,23 @@ class SeoTest extends TestCase
         $response->assertHeader('Content-Type', 'application/xml; charset=UTF-8');
 
         foreach (config('site.zones') as $zone) {
-            $response->assertSee('/lavage-de-vitres/'.$zone['slug'], false);
+            $response->assertSee('/nettoyage/'.$zone['slug'], false);
         }
+    }
+
+    public function test_old_elo_glass_urls_redirect_permanently(): void
+    {
+        $this->get('/lavage-de-vitres')->assertStatus(301)->assertRedirect('/nettoyage');
+        $this->get('/lavage-de-vitres/uccle')->assertStatus(301)->assertRedirect('/nettoyage/uccle');
+    }
+
+    public function test_legal_page_is_not_indexable(): void
+    {
+        $this->get('/mentions-legales')
+            ->assertOk()
+            ->assertSee('<meta name="robots" content="noindex, follow">', false);
+
+        $this->get('/sitemap.xml')->assertDontSee('/mentions-legales', false);
     }
 
     public function test_robots_points_to_the_sitemap(): void
