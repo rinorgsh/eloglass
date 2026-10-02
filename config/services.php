@@ -42,4 +42,17 @@ return [
     'gtm_id' => env('GTM_ID'),
     'ga_id' => env('GA_ID'),
 
+    /*
+    | Avis Google (API Business Profile). Tant que ces valeurs sont vides,
+    | la section « Avis » de la page d'accueil reste masquée.
+    */
+    'google_business' => [
+        'client_id' => env('GOOGLE_BP_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_BP_CLIENT_SECRET'),
+        'refresh_token' => env('GOOGLE_BP_REFRESH_TOKEN'),
+        'account_id' => env('GOOGLE_BP_ACCOUNT_ID'),
+        'location_id' => env('GOOGLE_BP_LOCATION_ID'),
+        'max_reviews' => env('GOOGLE_BP_MAX_REVIEWS', 6),
+    ],
+
 ];

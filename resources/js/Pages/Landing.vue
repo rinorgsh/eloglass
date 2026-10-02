@@ -11,12 +11,16 @@ import ServiceTicker from '../components/ServiceTicker.vue';
 import ServiceExplorer from '../components/ServiceExplorer.vue';
 import ProcessTimeline from '../components/ProcessTimeline.vue';
 import Sparkle from '../components/Sparkle.vue';
+import GoogleReviews from '../components/GoogleReviews.vue';
 import { useReveal } from '../composables/useReveal';
 
 const props = defineProps({
     seo: { type: Object, required: true },
     services: { type: Array, required: true },
     families: { type: Object, required: true },
+    partners: { type: Array, default: () => [] },
+    // null tant que les avis Google ne sont pas configurés ou récupérés.
+    googleReviews: { type: Object, default: null },
     zones: { type: Array, required: true },
     faq: { type: Array, required: true },
 });
@@ -205,6 +209,40 @@ const timeline = [
                 </div>
             </div>
         </section>
+
+        <!-- ══════════════════ PARTENAIRES ══════════════════ -->
+        <section v-if="partners.length" class="border-t border-filet py-16 sm:py-20">
+            <div class="wrap">
+                <div class="max-w-2xl">
+                    <h2 class="reveal text-[length:var(--step-h2)]">Nos partenaires</h2>
+                    <p class="lead reveal mt-4" style="--d: 80ms">
+                        Les enseignes et les entreprises avec lesquelles nous travaillons.
+                    </p>
+                </div>
+
+                <ul class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
+                    <li
+                        v-for="(partner, i) in partners"
+                        :key="partner.name"
+                        class="partenaire reveal grid h-28 place-items-center rounded-[4px] border p-5 sm:h-32"
+                        :class="partner.dark ? 'border-black bg-black' : 'border-filet bg-white'"
+                        :style="{ '--d': i * 70 + 'ms' }"
+                    >
+                        <img
+                            :src="partner.logo"
+                            :alt="partner.name"
+                            :width="partner.width"
+                            :height="partner.height"
+                            loading="lazy"
+                            decoding="async"
+                            class="h-16 w-auto max-w-full object-contain sm:h-20"
+                        />
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <GoogleReviews v-if="googleReviews" :data="googleReviews" />
 
         <!-- ══════════════════ MÉTHODE + CARREAU INTERACTIF ══════════════════ -->
         <section id="methode" class="section-y border-y border-filet bg-lin">
@@ -430,6 +468,14 @@ const timeline = [
 </template>
 
 <style scoped>
+/* Logo partenaire : il s'avance légèrement au survol. */
+.partenaire img {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.partenaire:hover img {
+    transform: scale(1.06);
+}
+
 /* Filtre des communes : les pastilles se réordonnent en glissant. */
 .commune-move,
 .commune-enter-active,

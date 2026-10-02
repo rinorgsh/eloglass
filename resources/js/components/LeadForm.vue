@@ -186,8 +186,8 @@ function submit() {
                     <select :id="idPrefix + '-service'" v-model="form.service" class="field">
                         <option value="">Je ne sais pas encore</option>
                         <!-- Groupé par famille : le visiteur trouve sa prestation sans lire toute la liste. -->
-                        <optgroup v-for="(list, key) in servicesByFamily" :key="key" :label="families[key]?.label ?? key">
-                            <option v-for="svc in list" :key="svc.slug" :value="svc.title">{{ svc.title }}</option>
+                        <optgroup v-for="(family, key) in families" :key="key" :label="family.label">
+                            <option v-for="svc in servicesByFamily[key] ?? []" :key="svc.slug" :value="svc.title">{{ svc.title }}</option>
                         </optgroup>
                     </select>
                 </div>

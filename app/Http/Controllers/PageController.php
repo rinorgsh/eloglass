@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\GoogleReviews;
 use App\Support\Seo;
 use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
@@ -25,6 +26,8 @@ class PageController extends Controller
             'seo' => $meta,
             'services' => config('site.services'),
             'families' => config('site.families'),
+            'partners' => config('site.partners'),
+            'googleReviews' => GoogleReviews::cached(),
             'zones' => $this->zoneLinks(),
             'faq' => config('site.faq'),
         ]);

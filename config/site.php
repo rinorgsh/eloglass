@@ -17,20 +17,21 @@ return [
     |----------------------------------------------------------------------
     | Prestations
     |----------------------------------------------------------------------
-    | Trois familles : 'maison', 'entreprise' et 'ponctuel'. Le champ 'family'
+    | Trois familles, affichées dans l'ordre de 'families' : 'entreprise',
+    | 'maison' (libellé « Privé ») et 'ponctuel'. Le champ 'family'
     | sert au regroupement à l'écran et dans le sélecteur du formulaire ; le
     | reste du site (JSON-LD, pages locales) consomme la liste à plat.
     |
     | 'icon' correspond à un composant lucide-vue-next.
     */
     'families' => [
-        'maison' => [
-            'label' => 'À la maison',
-            'lead' => 'Votre maison ou votre appartement, entretenu au rythme qui vous convient.',
-        ],
         'entreprise' => [
             'label' => 'En entreprise',
-            'lead' => 'Bureaux, commerces et immeubles, en contrat régulier et en dehors de vos heures d\'activité.',
+            'lead' => 'Bureaux, commerces et immeubles, en contrat régulier et en dehors de vos heures d\'activité, pour ne pas déranger le personnel.',
+        ],
+        'maison' => [
+            'label' => 'Privé',
+            'lead' => 'Votre maison ou votre appartement, entretenu au rythme qui vous convient.',
         ],
         'ponctuel' => [
             'label' => 'Travaux ponctuels',
@@ -444,6 +445,21 @@ return [
             'focus' => "Maisons du centre, lotissements de Malderen et de Steenhuffel, entreprises le long de l'A12 : nous connaissons la commune rue par rue.",
             'areas' => ['Centre', 'Malderen', 'Steenhuffel', 'Sint-Jozef'],
         ],
+    ],
+
+    /*
+    |----------------------------------------------------------------------
+    | Partenaires — logos affichés sur la page d'accueil
+    |----------------------------------------------------------------------
+    | Les fichiers sont dans public/partenaires. 'dark' pose le logo sur un
+    | fond noir (logo dessiné pour fond sombre).
+    */
+    'partners' => [
+        ['name' => 'Australian Homemade Ice Cream', 'logo' => '/partenaires/australian.webp', 'width' => 222, 'height' => 260],
+        ['name' => 'Belgaufra', 'logo' => '/partenaires/belgaufra.webp', 'width' => 308, 'height' => 260],
+        ['name' => 'Homeland', 'logo' => '/partenaires/homeland.webp', 'width' => 323, 'height' => 260],
+        ['name' => 'Baba', 'logo' => '/partenaires/baba.webp', 'width' => 809, 'height' => 260, 'dark' => true],
+        ['name' => 'Antika', 'logo' => '/partenaires/antika.webp', 'width' => 607, 'height' => 260],
     ],
 
     /*
