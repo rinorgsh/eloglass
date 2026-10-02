@@ -1,18 +1,18 @@
-<x-mail::message>
-# Merci {{ $name }} !
+@php($company = config('company'))
+<x-mail.layout :title="'Merci '.$name.', votre demande est bien arrivée'" :preview="'Nous vous répondons sous '.$company['response_time'].' ouvrables.'">
+    <p style="margin:0 0 16px;">
+        Nous avons bien reçu votre demande de devis. Nous vous répondons sous
+        <strong style="color:#06234f;">{{ $company['response_time'] }} ouvrables</strong>, avec un prix clair et sans engagement.
+    </p>
+    <p style="margin:0 0 6px;">Pour une réponse plus rapide, appelez-nous directement&nbsp;:</p>
 
-Nous avons bien reçu votre demande de devis.
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px 0 8px;">
+        <tr>
+            <td style="background-color:#06234f; border-radius:999px;">
+                <a href="tel:{{ $company['phone']['e164'] }}" style="display:inline-block; padding:14px 28px; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none;">{{ $company['phone']['display'] }}</a>
+            </td>
+        </tr>
+    </table>
 
-Un membre de l'équipe **{{ config('app.name') }}** revient vers vous sous **{{ config('company.response_time') }} ouvrables** avec un prix clair et sans engagement.
-
-Besoin d'une réponse plus rapide ? Appelez-nous directement :
-
-<x-mail::button :url="'tel:'.config('company.phone.e164')">
-{{ config('company.phone.display') }}
-</x-mail::button>
-
-À très vite,<br>
-{{ config('company.legal_name') }}<br>
-{{ config('company.address.street') }}, {{ config('company.address.postal_code') }} {{ config('company.address.city') }}<br>
-TVA {{ config('company.vat') }}
-</x-mail::message>
+    <p style="margin:24px 0 0;">À très vite,<br><span style="color:#06234f;">L'équipe {{ $company['name'] }}</span></p>
+</x-mail.layout>

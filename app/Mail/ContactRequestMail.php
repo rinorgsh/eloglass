@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -25,6 +26,9 @@ class ContactRequestMail extends Mailable
         $prefix = $this->kind === 'callback' ? 'Demande de rappel' : 'Nouvelle demande de devis';
 
         return new Envelope(
+            // Le nom d'expéditeur vient de la fiche société, pas de APP_NAME :
+            // un .env resté sur « Laravel » ne doit pas apparaître chez le client.
+            from: new Address(config('mail.from.address'), config('company.name')),
             subject: $prefix.' — '.($this->data['name'] ?? 'Contact').' · '.($this->data['phone'] ?? ''),
             replyTo: array_filter([$this->data['email'] ?? null]),
         );
@@ -33,7 +37,7 @@ class ContactRequestMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.contact',
+            view: 'mail.contact',
             with: ['data' => $this->data, 'kind' => $this->kind],
         );
     }
